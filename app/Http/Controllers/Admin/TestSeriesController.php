@@ -7,12 +7,21 @@ use App\Http\Controllers\Controller;
 
 use App\TestSeries;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TestSeriesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('owns:TestSeries')->except(['index','create','store']);
+    }
+
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function index(Request $request)
@@ -20,12 +29,14 @@ class TestSeriesController extends Controller
         $keyword = $request->get('search');
         $perPage = 25;
 
+        $testseries = TestSeries::where("user_id","=",Auth::id());
+
         if (!empty($keyword)) {
-            $testseries = TestSeries::where('title', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $testseries = TestSeries::latest()->paginate($perPage);
+            $testseries = $testseries->where('title', 'LIKE', "%$keyword%");
         }
+
+        $testseries = $testseries->latest()->paginate($perPage);
+
         return view('admin.test-series.index', compact('testseries'));
     }
 
@@ -45,6 +56,7 @@ class TestSeriesController extends Controller
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -90,9 +102,10 @@ class TestSeriesController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param  int  $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {

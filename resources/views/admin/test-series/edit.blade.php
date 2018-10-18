@@ -7,7 +7,7 @@
 
             <div class="col-md-9">
                 <div class="card">
-                    <div class="card-header">Edit TestSeries #{{ $testseries->id }}</div>
+                    <div class="card-header">Edit Test Series</div>
                     <div class="card-body">
                         <a href="{{ url('/admin/test-series') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                         <br />

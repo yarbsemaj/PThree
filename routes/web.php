@@ -29,9 +29,5 @@ Route::group(["prefix" => "admin", "as" => "admin.","middleware"=>"auth","namesp
     });
 });
 Route::resource('admin/test-series', 'Admin\\TestSeriesController');
-Route::resource('admin/test-series', 'Admin\\TestSeriesController');
-Route::resource('admin/test-series', 'Admin\\TestSeriesController');
-Route::resource('admin/test-series', 'Admin\\TestSeriesController');
-Route::resource('admin/test-series', 'Admin\\TestSeriesController');
-Route::resource('admin/test-series', 'Admin\\TestSeriesController');
-Route::resource('admin/test-series', 'Admin\\TestSeriesController');
+Route::resource('admin/police-forces', 'Admin\\PoliceForcesController');
+Route::resource('admin/test-partipants', 'Admin\\TestPartipantsController');

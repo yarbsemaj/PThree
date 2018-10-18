@@ -7,7 +7,7 @@
 
             <div class="col-md-9">
                 <div class="card">
-                    <div class="card-header">TestSeries {{ $testseries->id }}</div>
+                    <div class="card-header">Test Series {{ $testseries->title }}</div>
                     <div class="card-body">
 
                         <a href="{{ url('/admin/test-series') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
@@ -24,10 +24,7 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <tbody>
-                                    <tr>
-                                        <th>ID</th><td>{{ $testseries->id }}</td>
-                                    </tr>
-                                    <tr><th> Title </th><td> {{ $testseries->title }} </td></tr><tr><th> Url Token </th><td> {{ $testseries->url_token }} </td></tr><tr><th> User Id </th><td> {{ $testseries->user_id }} </td></tr>
+                                    <tr><th> Title </th><td> {{ $testseries->title }} </td></tr><tr><th> Url Token </th><td> {{ $testseries->url_token }} </td></tr>
                                 </tbody>
                             </table>
                         </div>
