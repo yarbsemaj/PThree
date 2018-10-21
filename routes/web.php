@@ -18,3 +18,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::group(["prefix" => "test", "as" => "test.","namespace"=>"Test"], function () {
+    Route::group(["prefix" => "map", "as" => "map."], function () {
+        Route::get('/index', function (){
+            return view("test.map.index");
+        });
+    });
+});
