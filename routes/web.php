@@ -31,3 +31,12 @@ Route::group(["prefix" => "admin", "as" => "admin.","middleware"=>"auth","namesp
 Route::resource('admin/test-series', 'Admin\\TestSeriesController');
 Route::resource('admin/police-forces', 'Admin\\PoliceForcesController');
 Route::resource('admin/test-partipants', 'Admin\\TestPartipantsController');
+
+Route::group(["prefix" => "test", "as" => "test.","namespace"=>"Test"], function () {
+    Route::group(["prefix" => "map", "as" => "map."], function () {
+        Route::get('/index', function (){
+            return view("test.map.index");
+        });
+    });
+});
+
