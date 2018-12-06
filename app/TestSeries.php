@@ -2,32 +2,12 @@
 
 namespace App;
 
+use App\OwnedModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class TestSeries extends Model
+class TestSeries extends OwnedModel
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'test_series';
-
-    /**
-    * The database primary key value.
-    *
-    * @var string
-    */
-    protected $primaryKey = 'id';
-
-    /**
-     * Attributes that should be mass-assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['title', 'url_token', 'user_id'];
-
     public function user()
     {
         return $this->belongsTo('App\User');
@@ -42,4 +22,8 @@ class TestSeries extends Model
         });
     }
 
+    function getOwner(): User
+    {
+        return $this->user;
+    }
 }

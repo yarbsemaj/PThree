@@ -37,7 +37,7 @@ class TestSeriesController extends Controller
 
         $testseries = $testseries->latest()->paginate($perPage);
 
-        return view('admin.test-series.index', compact('testseries'));
+        return view('crud.list.generic',["data"=>$testseries,"name"=>"Test Series","search" => $keyword]);
     }
 
     /**
@@ -47,7 +47,7 @@ class TestSeriesController extends Controller
      */
     public function create()
     {
-        return view('admin.test-series.create');
+        return view('crud.test-series.create');
     }
 
     /**
@@ -131,6 +131,6 @@ class TestSeriesController extends Controller
     {
         TestSeries::destroy($id);
 
-        return redirect('admin/test-series')->with('flash_message', 'TestSeries deleted!');
+        return redirect('admin/test-series')->with('flash_message', 'Test Series deleted!');
     }
 }
