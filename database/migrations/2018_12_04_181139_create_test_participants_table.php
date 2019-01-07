@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTestParticipantsTable extends Migration
 {
@@ -18,6 +18,10 @@ class CreateTestParticipantsTable extends Migration
             $table->integer("police_force_id");
             $table->integer("route_into_role_id");
             $table->integer("test_series_id");
+            $table->integer("training")->nullable();
+            $table->integer("years_in_role");
+            $table->integer("test_step")->default(0);
+            $table->string("token");
             $table->timestamps();
         });
     }

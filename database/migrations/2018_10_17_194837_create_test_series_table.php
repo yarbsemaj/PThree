@@ -15,10 +15,10 @@ class CreateTestSeriesTable extends Migration
         Schema::create('test_series', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('title')->nullable();
-            $table->text('url_token')->nullable();
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('name');
+            $table->longText('description')->nullable();
+            $table->text('url_token');
+            $table->integer('user_id');
             });
     }
 

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\CRUD;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests;
 use App\TestSeries;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,12 +31,12 @@ class TestSeriesController extends Controller
         $testseries = TestSeries::where("user_id","=",Auth::id());
 
         if (!empty($keyword)) {
-            $testseries = $testseries->where('title', 'LIKE', "%$keyword%");
+            $testseries = $testseries->where('name', 'LIKE', "%$keyword%");
         }
 
         $testseries = $testseries->latest()->paginate($perPage);
 
-        return view('crud.list.generic',["data"=>$testseries,"name"=>"Test Series","search" => $keyword]);
+        return view('crud.test-series.list', ["data" => $testseries, "name" => "Test Series", "search" => $keyword]);
     }
 
     /**
@@ -47,7 +46,7 @@ class TestSeriesController extends Controller
      */
     public function create()
     {
-        return view('crud.test-series.create');
+        return view('crud.test-series.create', ["url" => route("test-series.store")]);
     }
 
     /**
@@ -61,13 +60,14 @@ class TestSeriesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'title' => 'required|max:10'
+            'name' => 'required'
 		]);
         $requestData = $request->all();
-        
+
+
         TestSeries::create($requestData);
 
-        return redirect('admin/test-series')->with('flash_message', 'TestSeries added!');
+        return redirect(route("test-series.index"))->with('flash_message', 'TestSeries added!');
     }
 
     /**
@@ -81,7 +81,7 @@ class TestSeriesController extends Controller
     {
         $testseries = TestSeries::findOrFail($id);
 
-        return view('admin.test-series.show', compact('testseries'));
+        return view('crud.test-series.show', ['testseries' => $testseries]);
     }
 
     /**
@@ -95,7 +95,8 @@ class TestSeriesController extends Controller
     {
         $testseries = TestSeries::findOrFail($id);
 
-        return view('admin.test-series.edit', compact('testseries'));
+        return view('crud.test-series.edit', array_merge(compact('testseries'),
+            ["url" => route("test-series.update", ["id" => $id])]));
     }
 
     /**
@@ -110,14 +111,14 @@ class TestSeriesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-			'title' => 'required|max:10'
+            'name' => 'required'
 		]);
         $requestData = $request->all();
         
         $testseries = TestSeries::findOrFail($id);
         $testseries->update($requestData);
 
-        return redirect('admin/test-series')->with('flash_message', 'TestSeries updated!');
+        return redirect(route("test-series.index"))->with('flash_message', 'TestSeries updated!');
     }
 
     /**
@@ -131,6 +132,6 @@ class TestSeriesController extends Controller
     {
         TestSeries::destroy($id);
 
-        return redirect('admin/test-series')->with('flash_message', 'Test Series deleted!');
+        return redirect(route("test-series.index"))->with('flash_message', 'Test Series deleted!');
     }
 }

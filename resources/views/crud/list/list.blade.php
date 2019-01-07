@@ -1,4 +1,4 @@
- {{ Form::open(array("method"=>"get")) }}
+{{ Form::open(array("method"=>"get")) }}
     <div class="row">
         <div class="input-group">
             <input type="text" value="{{$search}}" class="form-control" name="search"
@@ -8,7 +8,7 @@
       </span>
         </div>
     </div>
-    {{ Form::close() }}
+{{ Form::close() }}
 
 @if(isset($favourText))
     {{$favourText}}

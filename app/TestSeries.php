@@ -2,15 +2,21 @@
 
 namespace App;
 
-use App\OwnedModel;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class TestSeries extends OwnedModel
 {
+
+    protected $fillable = ["name", "description"];
+
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function testParticipants()
+    {
+        return $this->hasMany('App\TestParticipant');
     }
 
     protected static function boot()
@@ -26,4 +32,6 @@ class TestSeries extends OwnedModel
     {
         return $this->user;
     }
+
+
 }
