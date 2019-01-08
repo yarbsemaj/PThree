@@ -18,3 +18,20 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('test-series', 'CRUD\\TestSeriesController');
+
+Route::group(["prefix" => "test", "as" => "test.","namespace"=>"Test"], function () {
+
+    Route::group(["prefix" => "map", "as" => "map."], function () {
+        Route::get('/index', function (){
+            return view("test.map.index");
+        });
+    });
+
+    Route::get("/{urlToken}", "TestSteward@index")->name("index");
+    Route::post("/{urlToken}", "TestSteward@store")->name("store");
+
+
+});
+
