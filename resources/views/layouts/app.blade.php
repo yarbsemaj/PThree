@@ -10,10 +10,10 @@
     <title>{{ config('app.name', 'Laravel') }} @yield("title")</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+<!--<script src="{{ asset('js/app.js') }}" defer></script>-->
     <script
-            src="https://code.jquery.com/jquery-3.3.1.slim.js"
-            integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA="
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
     @stack("scripts")
 
@@ -26,6 +26,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @stack("styles")
+
 </head>
 <body>
     <div id="app">

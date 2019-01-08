@@ -18,7 +18,7 @@ class VerifyOwner
     {
 
         $className = 'App\\' . ucfirst($class);
-            $model = $className::findOrFail($request->id);
+        $model = $className::findOrFail(reset($request->route()->parameters));
 
             if($model->getOwner()->id == Auth::id()) {
                 return $next($request);
