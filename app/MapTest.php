@@ -2,9 +2,17 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class MapTest extends Model
+class MapTest extends TestModel
 {
-    //
+    protected $fillable = ["name", "description", "map"];
+
+    function mapPins()
+    {
+        return $this->hasMany("App\MapPin");
+    }
+
+    function getColourClassAttribute()
+    {
+        return "primary";
+    }
 }

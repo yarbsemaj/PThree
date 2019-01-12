@@ -19,6 +19,11 @@ class TestSeries extends OwnedModel
         return $this->hasMany('App\TestParticipant');
     }
 
+    public function tests()
+    {
+        return $this->belongsToMany('App\Test');
+    }
+
     protected static function boot()
     {
         parent::boot();

@@ -1,7 +1,18 @@
 @extends('layouts.card')
 
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 @section('card-body')
-    {!! Form::open(['url' => $url]) !!}
+    {!! Form::open(['url' => $url,"enctype"=>"multipart/form-data"]) !!}
     @yield("form")
     <br>
     <input class="btn btn-primary btn-block" type="submit">

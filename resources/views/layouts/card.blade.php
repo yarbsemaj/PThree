@@ -9,6 +9,11 @@
                     <div class="card-body">
                         @yield("card-body")
                     </div>
+                    @hasSection("card-footer")
+                        <div class="card-footer">
+                            @yield("card-footer")
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

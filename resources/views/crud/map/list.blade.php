@@ -5,27 +5,25 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Description</th>
-            <th>Options</th>
+            <th>Map</th>
+            <th>Option</th>
         </tr>
         </thead>
         @foreach($data as $datum)
             <tr>
                 <td>
-                    <a href="{{route("test-series.show",["id"=>$datum->id])}}">
+                    <a href="{{route("map.show",["id"=>$datum->testable->id])}}">
                         {{$datum->name}}
                     </a>
                 </td>
                 <td>
-                    {{route("test.index",["url_token"=>$datum->url_token])}}
+                    <img class="img-fluid" src="{{route("map.image",["id"=>$datum->testable->map])}}">
                 </td>
                 <td>
-                    {{Form::open(['url' => route("test-series.destroy",["id"=>$datum->id])])}}
+                    {{Form::open(['url' => route("map.destroy",["id"=>$datum->testable->id])])}}
                     <div class="btn-group" role="group">
-                        <a class="btn btn-success" href="{{route("test-series.setup-test",["id"=>$datum->id])}}">
-                            <i class="fas fa-plus"></i></a>
-                        <a class="btn btn-info" href="{{route("test-series.edit",["id"=>$datum->id])}}">
-                            <i class="fas fa-pencil-alt"></i></a>
+                        <a class="btn btn-info" href="{{route("map.edit",["id"=>$datum->testable->id])}}"><i
+                                    class="fas fa-pencil-alt"></i></a>
                         @method('DELETE')
                         <button type="submit"
                                 class="btn btn-danger"
