@@ -9,9 +9,18 @@ var pinType = 0;
 
 var closnes = 0.02;
 var pins = [];
+var jsonObj;
+
+var normalisedArray = [];
 
 
-$(function(){
+$(function () {
+
+    $.getJSON(resultURL, function (data) {
+        console.log(data);
+        jsonObj = data;
+    });
+
     canvas = document.getElementById('map');
     ctx = canvas.getContext('2d');
     img.src = $("#map").data("img-src");
@@ -28,17 +37,17 @@ function setupCanvas() {
         drawScreen()
     });
 
-    $("#map").click(function(e){
+    $("#map").click(function (e) {
         pinsRemoved = false;
-        cursorPos = getCursorPosition(canvas,e);
-        pins.forEach(function(element, index){
-            if(Math.abs(cursorPos.x-element.x)<closnes&&Math.abs(cursorPos.y-element.y)<closnes){
-                pins.splice(index,1);
+        cursorPos = getCursorPosition(canvas, e);
+        pins.forEach(function (element, index) {
+            if (Math.abs(cursorPos.x - element.x) < closnes && Math.abs(cursorPos.y - element.y) < closnes) {
+                pins.splice(index, 1);
                 pinsRemoved = true;
             }
         });
-        if(!pinsRemoved){
-            pins.push(getCursorPosition(canvas,e));
+        if (!pinsRemoved) {
+            pins.push(getCursorPosition(canvas, e));
         }
         drawScreen();
     });
@@ -48,14 +57,6 @@ function setupCanvas() {
         target = $(e.currentTarget);
         pinType = target.data("pin-type");
         target.addClass("active");
-    });
-
-    $("#submit").click(function (e) {
-        axios.post('', {pins})
-            .then(function (response) {
-                window.onbeforeunload = null;
-                //window.location.href = '/home';
-            })
     });
 }
 
@@ -75,18 +76,38 @@ function loadPins() {
     }
 }
 
-function drawScreen(){
+function drawScreen() {
     canvas.width = $("#map").parent().width();
-    canvas.height = canvas.width/img.width*img.height;
+    canvas.height = canvas.width / img.width * img.height;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0,canvas.width,canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     drawPins();
+    drawHeatMap();
 }
 
 
-function drawPins(){
-    pins.forEach(function(element){
+function drawHeatMap() {
+
+    jsonObj.forEach(function (element) {
+        normalisedArray.push({
+            x: Math.round(element.x * canvas.width),
+            y: Math.round(element.y * canvas.height),
+            value: 10
+        })
+    });
+    var heatmap = h337.create({
+        container: document.getElementById("heatmap")
+    });
+
+    heatmap.setData({
+        max: 10,
+        data: normalisedArray,
+    });
+}
+
+function drawPins() {
+    pins.forEach(function (element) {
         ctx.drawImage(pin[element.type], element.x * canvas.width - 17.5, element.y * canvas.height - 17.5, 40, 40);
     });
 }

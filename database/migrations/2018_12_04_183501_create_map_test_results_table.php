@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMapTestResultsTable extends Migration
 {
@@ -17,6 +17,7 @@ class CreateMapTestResultsTable extends Migration
             $table->increments('id');
             $table->float("x");
             $table->float("y");
+            $table->integer("map_pin_id");
             $table->timestamps();
         });
     }

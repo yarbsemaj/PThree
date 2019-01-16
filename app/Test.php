@@ -28,6 +28,11 @@ class Test extends OwnedModel
         return $this->morphTo();
     }
 
+    public function testResults()
+    {
+        return $this->hasMany("App\TestResult");
+    }
+
     protected static function boot()
     {
         parent::boot();

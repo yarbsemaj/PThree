@@ -3,23 +3,21 @@
 namespace App\Http\Controllers\Test;
 
 use App\MapTest;
+use App\MapTestResult;
 use App\Test;
+use App\TestParticipant;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
-class MapController extends TestType
+class MapTestController extends TestType
 {
 
     public function __construct()
     {
-        Route::get('/home', 'HomeController@index')->name('home');
-
-
         $this->middleware('auth');
-        $this->middleware('owns:MapTest')->except(['index', 'create', 'store', 'image']);
+        $this->middleware('owns:Test')->except(['index', 'create', 'store', 'image']);
     }
 
     /**
@@ -99,7 +97,7 @@ class MapController extends TestType
      */
     public function show($id)
     {
-        $map = MapTest::findOrFail($id);
+        $map = Test::findOrFail($id)->testable;
 
         return view('crud.map.show', ['map' => $map]);
     }
@@ -113,7 +111,7 @@ class MapController extends TestType
      */
     public function edit($id)
     {
-        $map = MapTest::findOrFail($id);
+        $map = Test::findOrFail($id)->testable;
 
         return view('crud.map.edit', array_merge(compact('map'),
             ["url" => route("map.update", ["id" => $id])]));
@@ -136,7 +134,7 @@ class MapController extends TestType
             'map' => 'required|image'
         ]);
 
-        $map = MapTest::findOrFail($id);
+        $map = Test::findOrFail($id)->testable;
 
         $photoName = request()->file('map')->store('map');
 
@@ -170,7 +168,7 @@ class MapController extends TestType
      */
     public function destroy($id)
     {
-        MapTest::destroy($id);
+        $map = Test::findOrFail($id)->testable->destroy();
 
         return redirect(route("map.index"))->with('flash_message', 'Map deleted!');
     }
@@ -190,7 +188,7 @@ class MapController extends TestType
      */
     public function displayTest(Request $request, $id): View
     {
-        $map = MapTest::findOrFail($id);
+        $map = Test::findOrFail($id)->testable;
 
         return view("test.map.index", ["test" => $map]);
     }
@@ -200,12 +198,62 @@ class MapController extends TestType
      *
      * @param Request $request
      * @param $id test id;
+     * @param TestParticipant $participant
+     * @return void
+     */
+    public function storeResult(Request $request, $id, TestParticipant $participant): void
+    {
+        $test = Test::find($id);
+        $mapTest = $test->testable;
+
+        $request->validate([
+            "pins.*.x" => "required|numeric|between:0.0,1.0",
+            "pins.*.y" => "required|numeric|between:0.0,1.0",
+            "pins.*.type" => "required|numeric|between:0," . $mapTest->mapPins->count()]);
+
+
+        $pins = $mapTest->mapPins;
+
+        foreach ($request->pins as $pin) {
+            $results = MapTestResult::create(
+                ["x" => $pin["x"],
+                    "y" => $pin["y"],
+                    "map_pin_id" => $pins[$pin["type"]]->id]);
+            $results->testResult()->create(["test_participant_id" => $participant->id, "test_id" => $id]);
+        }
+    }
+
+    /**
+     * Returns a view with the results for a particular test
+     * @param Request $request
+     * @param $id
      * @return View
      */
-    public function storeResult(Request $request, $id): void
+    public function getResult(Request $request, $id): View
     {
-        $map = MapTest::findOrFail($id);
+        $map = Test::findOrFail($id)->testable;
 
 
+        return view("test.map.results", ["test" => $map]);
     }
+
+
+    public function getResultsData(Request $request, $id)
+    {
+        $query = parent::getResultsData($request, $id);
+
+        $results = $query->with("testresultsable")->get();
+
+        $results = $results->map->testresultsable;
+
+        if ($request->mapPins != null) {
+            $return = collect();
+            foreach ($request->mapPins as $mapPin)
+                $return = $results->where('map_pin_id', $mapPin)->union($return);
+        } else {
+            $return = $results;
+        }
+        return $return;
+    }
+
 }

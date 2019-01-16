@@ -53,10 +53,34 @@ class TestSteward
 
         $participant->testSeries()->associate($testSeries);
 
-        $participant->training = $request->traning;
+        $participant->training = $request->training;
         $participant->years_in_role = $request->yearsInRole;
 
         $participant->save();
+
+
+        return redirect("test.display", ["participantToken" => $participant->token]);
+    }
+
+    function getTest(Request $request, $participantToken)
+    {
+        $participant = TestParticipant::where("token", "=", $participantToken)->firstOrFail();
+        $testSeries = $participant->testSeries;
+        $test = $testSeries->tests->get($participant->test_step);
+        $controllerName = "App\Http\Controllers\Test\\" . last(explode("\\", $test->testable_type)) . "Controller";
+        $controller = new $controllerName;
+        return ($controller->displayTest($request, $test->testable->id));
+    }
+
+    function saveTest(Request $request, $participantToken)
+    {
+        $participant = TestParticipant::where("token", "=", $participantToken)->firstOrFail();
+        $testSeries = $participant->testSeries;
+        $test = $testSeries->tests->get($participant->test_step);
+        $controllerName = "App\Http\Controllers\Test\\" . last(explode("\\", $test->testable_type)) . "Controller";
+        $controller = new $controllerName;
+        $controller->storeResult($request, $test->id, $participant);
+
 
     }
 
