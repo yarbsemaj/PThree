@@ -18,6 +18,8 @@ class MapTestController extends TestType
     {
         $this->middleware('auth');
         $this->middleware('owns:Test')->except(['index', 'create', 'store', 'image']);
+        $this->middleware('testType:MapTest')->except(['index', 'create', 'store', 'image']);
+
     }
 
     /**
@@ -99,7 +101,7 @@ class MapTestController extends TestType
     {
         $map = Test::findOrFail($id)->testable;
 
-        return view('crud.map.show', ['map' => $map]);
+        return view('crud.map.show', ['test' => $map]);
     }
 
     /**
@@ -244,7 +246,7 @@ class MapTestController extends TestType
 
         $results = $query->with("testresultsable")->get();
 
-        $results = $results->map->testresultsable;
+        $results = $results->pluck("testresultsable");
 
         if ($request->mapPins != null) {
             $return = collect();

@@ -44,6 +44,10 @@ abstract class TestModel extends OwnedModel
 
     abstract function getColourClassAttribute();
 
+    abstract function getRouteNameAttribute();
+
+    abstract function getControllerClassAttribute();
+
     function test()
     {
         return $this->morphOne("App\Test", "testable");

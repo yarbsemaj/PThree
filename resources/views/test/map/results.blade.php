@@ -1,4 +1,4 @@
-@extends ("layouts.results")
+@extends ("layouts.results-wide")
 
 @section("card-header",$test->test->name)
 @section('card-body')

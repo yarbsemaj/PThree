@@ -30,12 +30,26 @@ Route::get('/map/preview/{id}', 'Test\\MapTestController@displayTest')->name("ma
 Route::get('/map/results/{id}', 'Test\\MapTestController@getResult')->name("map.results");
 Route::get('/map/results/{id}/data.json', 'Test\\MapTestController@getResultsData')->name("map.results.data");
 
+Route::resource('test-participant', 'CRUD\\TestParticipantController')->only([
+    'index', 'show', 'destroy'
+]);
+
+
+Route::resource('free-text', 'Test\\FreeTextTestController');
+Route::get('/free-text/preview/{id}', 'Test\\FreeTextTestController@displayTest')->name("free-text.preview");
+Route::get('/free-text/results/{id}', 'Test\\FreeTextTestController@getResult')->name("free-text.results");
+Route::get('/free-text/results/{id}/data.json', 'Test\\FreeTextTestController@getResultsData')->name("free-text.results.data");
+
 
 
 
 Route::group(["prefix" => "test", "as" => "test.","namespace"=>"Test"], function () {
-    Route::get("/{urlToken}", "TestSteward@index")->name("index");
-    Route::post("/{urlToken}", "TestSteward@store")->name("store");
+    Route::get("/{participantToken}", "TestSteward@index")->name("index");
+
+    Route::get("/begin/{participantToken}", "TestSteward@getTestStart")->name("begin");
+
+    Route::get("basics/{urlToken}", "TestSteward@basics")->name("basics");
+    Route::post("basics/{urlToken}", "TestSteward@store")->name("store");
 
     Route::get("/underway/{participantToken}", "TestSteward@getTest")->name("display");
     Route::post("/underway/{participantToken}", "TestSteward@saveTest")->name("save");

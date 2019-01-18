@@ -54,7 +54,7 @@ function setupCanvas() {
         axios.post('', {pins})
             .then(function (response) {
                 window.onbeforeunload = null;
-                //window.location.href = '/home';
+                window.location.href = '';
             })
     });
 }

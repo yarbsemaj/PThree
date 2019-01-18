@@ -37,20 +37,6 @@ function setupCanvas() {
         drawScreen()
     });
 
-    $("#map").click(function (e) {
-        pinsRemoved = false;
-        cursorPos = getCursorPosition(canvas, e);
-        pins.forEach(function (element, index) {
-            if (Math.abs(cursorPos.x - element.x) < closnes && Math.abs(cursorPos.y - element.y) < closnes) {
-                pins.splice(index, 1);
-                pinsRemoved = true;
-            }
-        });
-        if (!pinsRemoved) {
-            pins.push(getCursorPosition(canvas, e));
-        }
-        drawScreen();
-    });
 
     $(".pinType").click(function (e) {
         $(".pinType").removeClass("active");

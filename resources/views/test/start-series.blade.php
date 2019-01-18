@@ -14,13 +14,10 @@
             </ul>
         </div>
     @endif
-
-    @markdown($testSeries->description)
-    Before the survey begins please provide some basic information about your traning, past experiences and force your part of
+    <h4>Before the survey begins please provide some basic information about your training, past experiences and force
+        your part of.</h4>
 
     {!! Form::open(['url' => route("test.store",["url_token"=>$testSeries->url_token])]) !!}
-
-    <div class="card">
         <div class="form-group">
             <h5>What police force are you a member of?</h5>
             {!! Form::select('policeForce',array_merge([""=>""],$policeForce->pluck('name', 'name')->toArray()),null,["class"=>"chosenFreeText","required"=>"true"]); !!}
@@ -32,7 +29,6 @@
         <div class="form-group">
             <h5>What year did you you complete your CPTD training?</h5>
             <select class="form-control chosen" name="training">
-                <option>I have received no formal training</option>
                 @for($i=0; $i<60; $i++)
                     <option value="{{date("Y")-$i}}">{{date("Y")-$i}}</option>
                 @endfor
@@ -48,7 +44,6 @@
                 @endfor
             </select>
         </div>
-    </div>
     <div class="input-group">
         <button class="btn-outline-success btn-block btn" type="submit">Begin <i class="fas fa-arrow-right"></i>
         </button>

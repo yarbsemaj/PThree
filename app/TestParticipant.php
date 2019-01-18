@@ -11,12 +11,22 @@ class TestParticipant extends OwnedModel
         parent::creating(function ($model) {
             $model->token = str_random();
         });
+
+        parent::deleting(function ($model) {
+            $model->testResults()->delete();
+        });
     }
 
     function getOwner(): User
     {
-        return $this->test_series->user;
+        return $this->testSeries->user;
     }
+
+    function testResults()
+    {
+        return $this->hasMany("App\TestResult");
+    }
+
 
     function policeForce()
     {

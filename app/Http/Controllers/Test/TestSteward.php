@@ -19,9 +19,9 @@ use Illuminate\Http\Request;
 class TestSteward
 {
 
-    function index(Request $request, $testToken)
+    function basics(Request $request, $testToken)
     {
-        $testSeries = TestSeries::where("url_token", $testToken)->first();
+        $testSeries = TestSeries::where("url_token", $testToken)->firstOrFail();
         $policeForce = PoliceForce::all();
         $routeIntoRole = RouteIntoRole::all();
 
@@ -32,15 +32,13 @@ class TestSteward
     function store(Request $request, $testToken)
     {
 
-        $testSeries = TestSeries::where("url_token", $testToken)->first();
+        $testSeries = TestSeries::where("url_token", $testToken)->firstOrFail();
 
-
-        $dataRange = (date("Y") - 100) . "," . date("Y");
 
         $request->validate([
             "policeForce" => "required",
             "routeIntoRole" => "required",
-            "training" => "",
+            "training" => "required",
             "yearsInRole" => "required|between:0,100"]);
 
 
@@ -59,30 +57,51 @@ class TestSteward
         $participant->save();
 
 
-        return redirect("test.display", ["participantToken" => $participant->token]);
+        return redirect()->route("test.begin", ["participantToken" => $participant->token]);
+    }
+
+    function getTestStart(Request $request, $participantToken)
+    {
+        $participant = TestParticipant::where("token", "=", $participantToken)->firstOrFail();
+        $testSeries = $participant->testSeries;
+        return view("test.info-serise", ["testSeries" => $testSeries, "testParticipant" => $participant]);
+    }
+
+    function index(Request $request, $testToken)
+    {
+        $testSeries = TestSeries::where("url_token", $testToken)->firstOrFail();
+        return view("test.description-series", ["testSeries" => $testSeries]);
     }
 
     function getTest(Request $request, $participantToken)
     {
         $participant = TestParticipant::where("token", "=", $participantToken)->firstOrFail();
         $testSeries = $participant->testSeries;
-        $test = $testSeries->tests->get($participant->test_step);
-        $controllerName = "App\Http\Controllers\Test\\" . last(explode("\\", $test->testable_type)) . "Controller";
-        $controller = new $controllerName;
-        return ($controller->displayTest($request, $test->testable->id));
+        $tests = $testSeries->tests;
+        if ($tests->count() > $participant->test_step) {
+            $test = $tests->get($participant->test_step);
+            $controllerName = $test->testable->controllerClass;
+            $controller = new $controllerName;
+            return ($controller->displayTest($request, $test->id));
+        } else {
+            return view("test.end-series", ["testSeries" => $testSeries, "testParticipant" => $participant]);
+        }
     }
 
     function saveTest(Request $request, $participantToken)
     {
         $participant = TestParticipant::where("token", "=", $participantToken)->firstOrFail();
         $testSeries = $participant->testSeries;
-        $test = $testSeries->tests->get($participant->test_step);
-        $controllerName = "App\Http\Controllers\Test\\" . last(explode("\\", $test->testable_type)) . "Controller";
-        $controller = new $controllerName;
-        $controller->storeResult($request, $test->id, $participant);
-
-
+        $tests = $testSeries->tests;
+        if ($tests->count() > $participant->test_step) {
+            $test = $tests->get($participant->test_step);
+            $controllerName = $test->testable->controllerClass;
+            $controller = new $controllerName;
+            $controller->storeResult($request, $test->id, $participant);
+            $participant->test_step++;
+            $participant->save();
+        } else {
+            return response('', 404);
+        }
     }
-
-
 }

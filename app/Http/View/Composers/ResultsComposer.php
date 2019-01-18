@@ -26,7 +26,6 @@ class ResultsComposer
      */
     public function compose(View $view)
     {
-
         $test = Test::findOrFail(request()->id);
 
         $training = [];

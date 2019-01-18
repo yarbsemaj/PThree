@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Http\Controllers\Test\MapTestController;
+
 class MapTest extends TestModel
 {
     protected $fillable = ["name", "description", "map"];
@@ -14,5 +16,15 @@ class MapTest extends TestModel
     function getColourClassAttribute()
     {
         return "primary";
+    }
+
+    function getRouteNameAttribute()
+    {
+        return "map";
+    }
+
+    function getControllerClassAttribute()
+    {
+        return MapTestController::class;
     }
 }

@@ -24,6 +24,14 @@ class ViewServiceProvider extends ServiceProvider
         View::composer(
             'layouts.results', 'App\Http\View\Composers\ResultsComposer'
         );
+
+        View::composer(
+            'layouts.results-wide', 'App\Http\View\Composers\ResultsComposer'
+        );
+
+        View::composer(
+            "layouts.test.show", 'App\Http\View\Composers\TestDetailsComposer'
+        );
     }
 
     /**

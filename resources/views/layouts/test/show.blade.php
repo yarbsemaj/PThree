@@ -1,14 +1,13 @@
 @extends('layouts.card')
 
-@section("title",$testseries->name)
+@section("title",$test->name)
 @section('card-body')
-    @markdown($testseries->description)
+    @markdown($test->description)
+
+    @yield("additional-info")
 
     <div class="card">
-        <div class="card-body">{{route("test.index",["url_token"=>$testseries->url_token])}}</div>
-    </div>
-    <br>
-    <div class="card">
+        <div class="card-header">Results</div>
         <div class="card-body">
             <table class="table table-striped table-bordered">
                 <thead>
@@ -19,7 +18,7 @@
                     <th>Date</th>
                 </tr>
                 </thead>
-                @foreach($testseries->testParticipants as $testParticipant)
+                @foreach($testParticipants as $testParticipant)
                     <tr>
                         <td>
                             <a href="{{route("test-participant.show",["id"=>$testParticipant->id])}}">
@@ -38,21 +37,36 @@
                     </tr>
                 @endforeach
             </table>
-
         </div>
     </div>
     <br>
     <div class="card">
+        <div class="card-header">Test Series</div>
         <div class="card-body">
-            <ul class="list-group rounded">
-                @foreach($testseries->tests as $test)
-                    <li class="list-group-item list-group-item-{{$test->testable->colourClass}}">
-                        <a href="{{route($test->testable->routeName.".show",["id"=>$test->id])}}">{{$test->name}}</a>
-                    </li>
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Participant ID</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                @foreach($testSeriess as $testSeries)
+                    <tr>
+                        <td>
+                            <a href="{{route("test-series.show",["id"=>$testSeries->id])}}">
+                                {{$testSeries->id}}
+                            </a>
+                        </td>
+                        <td>
+                            {{$testSeries->name}}
+                        </td>
+                        <td>
+                            {{$testSeries->name}}
+                        </td>
+                    </tr>
                 @endforeach
-            </ul>
+            </table>
         </div>
     </div>
 @endsection
-
-
