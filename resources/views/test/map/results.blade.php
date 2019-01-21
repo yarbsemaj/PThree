@@ -11,14 +11,6 @@
     </div>
 @endsection
 
-@section("additional-filters")
-    <div class="form-group">
-        <lable>Pins</lable>
-        {{ Form::select("mapPins[]",$test->mapPins->pluck("name","id"),request()->mapPins,['multiple'=>true, "class"=>"form-control chosenPins"]) }}
-    </div>
-@endsection
-
-
 @push("scripts")
     <script src="{{ asset('js/map_results.js') }}"></script>
     <script src="{{ asset('js/heatmap.min.js') }}"></script>

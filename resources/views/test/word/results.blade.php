@@ -7,13 +7,17 @@
 @endsection
 
 @section("additional-filters")
+    <div class="form-group">
+        <lable>Respondents selected</lable>
+        {{ Form::select("words[]",$test->wordTestWords->pluck("name","id"),request()->mapPins,['multiple'=>true, "class"=>"choosen"]) }}
+    </div>
 @endsection
 
 
 @push("scripts")
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-        var resultURL = "{{route("order.results.data",["id"=>$test->test->id])}}?{!!http_build_query(request()->all())!!}";
+        var resultURL = "{{route("word.results.data",["id"=>$test->test->id])}}?{!!http_build_query(request()->all())!!}";
 
         var answers;
 
@@ -29,15 +33,15 @@
                     var table = google.visualization.arrayToDataTable(data);
 
                     var options = {
-                        title: "Number who expressed preference for each option",
-                        chartArea: {width: '65%'},
+                        title: "Number who expressed prefrence for each option",
+                        chartArea: {width: '100%'},
                         orientation: "horizontal",
                         vAxis: {
                             format: '0',
                             minorGridlines: {"count": 0}
                         },
                         hAxis: {
-                            title: 'Preference',
+                            title: 'Selection',
                             minValue: 0,
                         },
                     };

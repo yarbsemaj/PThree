@@ -46,6 +46,14 @@ Route::group(["namespace" => "Test"], function () {
         Route::get('/results/{id}', 'OrderTestController@getResult')->name("results");
         Route::get('/results/{id}/data.json', 'OrderTestController@getResultsData')->name("results.data");
     });
+
+
+    Route::resource('word', 'WordTestController');
+    Route::group(["as" => "word.", "prefix" => "word"], function () {
+        Route::get('/preview/{id}', 'WordTestController@displayTest')->name("preview");
+        Route::get('/results/{id}', 'WordTestController@getResult')->name("results");
+        Route::get('/results/{id}/data.json', 'WordTestController@getResultsData')->name("results.data");
+    });
 });
 
 

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMultiWordTestsTable extends Migration
 {
@@ -15,8 +15,7 @@ class CreateMultiWordTestsTable extends Migration
     {
         Schema::create('multi_word_tests', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("max")->nullable();
-            $table->integer("min")->nullable();
+            $table->integer("max");
             $table->timestamps();
         });
     }
