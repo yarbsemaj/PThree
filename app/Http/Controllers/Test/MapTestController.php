@@ -66,7 +66,8 @@ class MapTestController extends TestType
     {
         $this->validate($request, [
             'name' => 'required',
-            'map' => 'required|image'
+            'map' => 'required|image',
+            'mapPins' => 'required'
         ]);
 
         $data = $request->all();
@@ -133,7 +134,8 @@ class MapTestController extends TestType
 
         $this->validate($request, [
             'name' => 'required',
-            'map' => 'required|image'
+            'map' => 'required|image',
+            'mapPins' => 'required'
         ]);
 
         $map = Test::findOrFail($id)->testable;
@@ -170,7 +172,7 @@ class MapTestController extends TestType
      */
     public function destroy($id)
     {
-        $map = Test::findOrFail($id)->testable->destroy();
+        $map = Test::findOrFail($id)->testable->delete();
 
         return redirect(route("map.index"))->with('flash_message', 'Map deleted!');
     }

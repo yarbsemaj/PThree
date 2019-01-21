@@ -161,7 +161,10 @@ class TestSeriesController extends Controller
 
         $testSeries = TestSeries::findOrFail($id);
 
-        $testSeries->tests()->sync($request->name);
+        $testSeries->tests()->detach();
+
+
+        $testSeries->tests()->attach($request->name);
 
         return redirect()->route("test-series.index");
 

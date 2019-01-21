@@ -24,24 +24,34 @@ Route::get('test-series/add-test/{id}', 'CRUD\\TestSeriesController@setupTest')-
 Route::post('test-series/add-test/{id}', 'CRUD\\TestSeriesController@saveSetupTest')->name("test-series.setup-test-save");;
 
 
-Route::resource('map', 'Test\\MapTestController');
-Route::get('/map/image/{file}', 'Test\\MapTestController@image')->name("map.image");
-Route::get('/map/preview/{id}', 'Test\\MapTestController@displayTest')->name("map.preview");
-Route::get('/map/results/{id}', 'Test\\MapTestController@getResult')->name("map.results");
-Route::get('/map/results/{id}/data.json', 'Test\\MapTestController@getResultsData')->name("map.results.data");
+Route::group(["namespace" => "Test"], function () {
+    Route::resource('map', 'MapTestController');
+    Route::group(["as" => "map.", "prefix" => "map"], function () {
+        Route::get('image/{file}', 'MapTestController@image')->name("image");
+        Route::get('preview/{id}', 'MapTestController@displayTest')->name("preview");
+        Route::get('results/{id}', 'MapTestController@getResult')->name("results");
+        Route::get('results/{id}/data.json', 'MapTestController@getResultsData')->name("results.data");
+    });
+
+    Route::resource('free-text', 'FreeTextTestController');
+    Route::group(["as" => "free-text.", "prefix" => "free-text"], function () {
+        Route::get('/preview/{id}', 'FreeTextTestController@displayTest')->name("preview");
+        Route::get('/results/{id}', 'FreeTextTestController@getResult')->name("results");
+        Route::get('/results/{id}/data.json', 'FreeTextTestController@getResultsData')->name("results.data");
+    });
+
+    Route::resource('order', 'OrderTestController');
+    Route::group(["as" => "order.", "prefix" => "order"], function () {
+        Route::get('/preview/{id}', 'OrderTestController@displayTest')->name("preview");
+        Route::get('/results/{id}', 'OrderTestController@getResult')->name("results");
+        Route::get('/results/{id}/data.json', 'OrderTestController@getResultsData')->name("results.data");
+    });
+});
+
 
 Route::resource('test-participant', 'CRUD\\TestParticipantController')->only([
     'index', 'show', 'destroy'
 ]);
-
-
-Route::resource('free-text', 'Test\\FreeTextTestController');
-Route::get('/free-text/preview/{id}', 'Test\\FreeTextTestController@displayTest')->name("free-text.preview");
-Route::get('/free-text/results/{id}', 'Test\\FreeTextTestController@getResult')->name("free-text.results");
-Route::get('/free-text/results/{id}/data.json', 'Test\\FreeTextTestController@getResultsData')->name("free-text.results.data");
-
-
-
 
 Route::group(["prefix" => "test", "as" => "test.","namespace"=>"Test"], function () {
     Route::get("/{participantToken}", "TestSteward@index")->name("index");

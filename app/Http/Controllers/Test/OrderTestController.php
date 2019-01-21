@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Test;
 
-use App\FreeTextTest;
-use App\FreeTextTestResult;
+use App\OrderTest;
+use App\OrderTestResult;
 use App\Test;
 use App\TestParticipant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class FreeTextTestController extends TestType
+class OrderTestController extends TestType
 {
 
     public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('owns:Test')->except(['index', 'create', 'store']);
-        $this->middleware('testType:FreeTextTest')->except(['index', 'create', 'store']);
+        $this->middleware('testType:OrderTest')->except(['index', 'create', 'store']);
+
     }
 
     /**
@@ -31,7 +32,7 @@ class FreeTextTestController extends TestType
         $keyword = $request->get('search');
         $perPage = 25;
 
-        $tests = Test::where("user_id", "=", Auth::id())->where("testable_type", "=", "App\FreeTextTest");
+        $tests = Test::where("user_id", "=", Auth::id())->where("testable_type", "=", "App\OrderTest");
 
         if (!empty($keyword)) {
             $tests = $tests->where('name', 'LIKE', "%$keyword%");
@@ -39,7 +40,7 @@ class FreeTextTestController extends TestType
 
         $tests = $tests->latest()->paginate($perPage);
 
-        return view('crud.free-text.list', ["data" => $tests, "name" => "Free Text", "search" => $keyword]);
+        return view('crud.order.list', ["data" => $tests, "name" => "Order", "search" => $keyword]);
     }
 
     /**
@@ -49,7 +50,7 @@ class FreeTextTestController extends TestType
      */
     public function create()
     {
-        return view('crud.free-text.create', ["url" => route("free-text.index")]);
+        return view('crud.order.create', ["url" => route("order.index")]);
     }
 
     /**
@@ -64,13 +65,21 @@ class FreeTextTestController extends TestType
     {
         $this->validate($request, [
             'name' => 'required',
+            'words' => 'required'
         ]);
 
         $data = $request->all();
+        $words = collect($data["words"]);
 
-        FreeTextTest::create($data);
+        $words = $words->map(function ($item, $key) {
+            return ["name" => $item];
+        });
 
-        return redirect(route("free-text.index"))->with('flash_message', 'Free Text Test added!');
+        $orderTest = OrderTest::create($data);
+
+        $orderTest->orderTestWords()->createMany($words->toArray());
+
+        return redirect(route("order.index"))->with('flash_message', 'Order Test added!');
     }
 
     /**
@@ -82,9 +91,9 @@ class FreeTextTestController extends TestType
      */
     public function show($id)
     {
-        $freeText = Test::findOrFail($id)->testable;
+        $order = Test::findOrFail($id)->testable;
 
-        return view('crud.free-text.show', ['test' => $freeText]);
+        return view('crud.order.show', ['test' => $order]);
     }
 
     /**
@@ -98,8 +107,8 @@ class FreeTextTestController extends TestType
     {
         $data = Test::findOrFail($id)->testable;
 
-        return view('crud.free-text.edit', array_merge(compact('data'),
-            ["url" => route("free-text.update", ["id" => $id])]));
+        return view('crud.order.edit', array_merge(compact('data'),
+            ["url" => route("order.update", ["id" => $id])]));
     }
 
     /**
@@ -116,15 +125,27 @@ class FreeTextTestController extends TestType
 
         $this->validate($request, [
             'name' => 'required',
+            'words' => 'required'
         ]);
 
-        $freeTextTest = Test::findOrFail($id)->testable;
+        $orderTest = Test::findOrFail($id)->testable;
 
         $data = $request->all();
 
-        $freeTextTest->update($data);
+        $orderTest->update($data);
 
-        return redirect(route("free-text.index"))->with('flash_message', 'Free Text Test updated!');
+        $orderTest->orderTestWords()->delete();
+
+        $words = collect($data["words"]);
+
+        $words = $words->map(function ($item, $key) {
+            return ["name" => $item];
+        });
+
+        $orderTest->orderTestWords()->createMany($words->toArray());
+
+
+        return redirect(route("order.index"))->with('flash_message', 'Order Test updated!');
     }
 
     /**
@@ -138,7 +159,7 @@ class FreeTextTestController extends TestType
     {
         Test::findOrFail($id)->testable->delete();
 
-        return redirect(route("free-text.index"))->with('flash_message', 'Map deleted!');
+        return redirect(route("order.index"))->with('flash_message', 'Map deleted!');
     }
 
     /**
@@ -152,7 +173,7 @@ class FreeTextTestController extends TestType
     {
         $map = Test::findOrFail($id)->testable;
 
-        return view("test.free-text.index", ["test" => $map]);
+        return view("test.order.index", ["test" => $map]);
     }
 
     /**
@@ -165,9 +186,23 @@ class FreeTextTestController extends TestType
      */
     public function storeResult(Request $request, $id, TestParticipant $participant): void
     {
-        $request->validate(["answer" => "required"]);
-        $results = FreeTextTestResult::create($request->all());
-        $results->testResult()->create(["test_participant_id" => $participant->id, "test_id" => $id]);
+        $test = Test::find($id);
+        $orderTest = $test->testable;
+
+        $request->validate(["words" => "required"],
+            ["words.*" => "required|numeric|between:0," . $orderTest->orderTestWords->count()]);
+
+        $index = 1;
+
+        foreach ($request->words as $word) {
+            $results = OrderTestResult::create([
+                    "position" => $index,
+                    "order_test_word_id" => $orderTest->orderTestWords[$word]->id]
+            );
+
+            $results->testResult()->create(["test_participant_id" => $participant->id, "test_id" => $id]);
+            $index++;
+        }
     }
 
 
@@ -182,7 +217,7 @@ class FreeTextTestController extends TestType
         $test = Test::findOrFail($id)->testable;
 
 
-        return view("test.free-text.results", ["test" => $test]);
+        return view("test.order.results", ["test" => $test]);
     }
 
 
@@ -192,27 +227,25 @@ class FreeTextTestController extends TestType
 
         $results = $query->with("testresultsable")->get();
 
-        $results = $results->pluck("testresultsable");
+        $result = $results->pluck("testresultsable");
 
-        $wordCount = collect(array_count_values(explode(" ", $results->pluck("answer")->implode(" "))));
+        $test = Test::findOrFail($id);
 
-        $wordCount = $wordCount->map(function ($item, $key) {
-            return ["text" => $key, "weight" => $item];
-        })->values();
+        $words = $test->testable->orderTestWords;
 
-        $answers = $results->map(function ($item) {
-            return [
-                $item->testResult->testParticipant->token,
-                $item->answer,
-                $item->testResult->testParticipant->testSeries->name,
-                $item->testResult->testParticipant->policeForce->name,
-                $item->testResult->testParticipant->routeIntoRole->name,
-                $item->testResult->testParticipant->years_in_role,
-                $item->testResult->testParticipant->traning];
-        })->values();
+        $count = array();
 
+        for ($i = 1; $i < $words->count() + 1; $i++) {
+            $row = ["Position $i"];
+            foreach ($words as $word) {
+                $word = $result->where("order_test_word_id", $word->id)->where("position", $i);
+                $row[] = $word->count();
+            }
+            $count[] = $row;
+        }
 
-        return ["tagCloud" => $wordCount, "answers" => $answers];
+        $wordName = $words->pluck("name");
+        return array_merge([array_merge(["Position"], $wordName->toArray())], $count);
     }
 
 }
