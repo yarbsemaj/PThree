@@ -6,8 +6,8 @@
                 @yield("card-header")
             </div>
             <div class="row no-gutters">
-                <div class="col-2">
-                    <form class="container" action="" method="get">
+                <div class="col-2" style="background-color: var(--light);">
+                    <form class="container" style="padding-top: 10px" action="" method="get">
                         <h2>Filters</h2>
                         <div class="form-group">
                             <label>Route Into Role</label>

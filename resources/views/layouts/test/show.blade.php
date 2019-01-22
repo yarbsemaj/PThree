@@ -5,7 +5,18 @@
     @markdown($test->description)
 
     @yield("additional-info")
+    <div class="text-center">
 
+        <a class="btn btn-lg btn-outline-primary" href="{{route($test->routeName.".results",["id"=>$test->test->id])}}">
+            Results
+            <i class="fas fa-poll"></i></a>
+        <a class="btn btn-lg btn-outline-secondary"
+           href="{{route($test->routeName.".preview",["id"=>$test->test->id])}}">
+            Preview
+            <i class="fas fa-search"></i>
+        </a>
+    </div>
+    <br>
     <div class="card">
         <div class="card-header">Results</div>
         <div class="card-body">
