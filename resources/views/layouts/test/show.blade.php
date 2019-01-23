@@ -57,7 +57,7 @@
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th>Participant ID</th>
+                    <th>Test Series ID</th>
                     <th>Name</th>
                     <th>Date</th>
                 </tr>
