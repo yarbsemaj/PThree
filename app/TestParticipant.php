@@ -33,6 +33,12 @@ class TestParticipant extends OwnedModel
         return $this->belongsTo("App\PoliceForce");
     }
 
+    function country()
+    {
+        return $this->belongsTo("App\Country");
+    }
+
+
     function routeIntoRole()
     {
         return $this->belongsTo("App\RouteIntoRole");

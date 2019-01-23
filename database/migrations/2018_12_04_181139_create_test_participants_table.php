@@ -18,7 +18,8 @@ class CreateTestParticipantsTable extends Migration
             $table->integer("police_force_id");
             $table->integer("route_into_role_id");
             $table->integer("test_series_id");
-            $table->integer("training")->nullable();
+            $table->integer("country_id");
+            $table->integer("training");
             $table->integer("years_in_role");
             $table->integer("test_step")->default(0);
             $table->string("token");
