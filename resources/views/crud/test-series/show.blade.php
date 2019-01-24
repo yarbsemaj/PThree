@@ -22,15 +22,15 @@
                 @foreach($testseries->testParticipants as $testParticipant)
                     <tr>
                         <td>
-                            <a href="">
-                                {{$testParticipant->id}}
+                            <a href="{{route("test-participant.show",["id"=>$testParticipant->id])}}">
+                                {{$testParticipant->token}}
                             </a>
                         </td>
                         <td>
                             {{$testParticipant->policeForce->name}}
                         </td>
                         <td>
-                            {{$testParticipant->routeIntoForce->name}}
+                            {{$testParticipant->routeIntoRole->name}}
                         </td>
                         <td>
                             {{$testParticipant->updated_at}}
@@ -39,6 +39,18 @@
                 @endforeach
             </table>
 
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <ul class="list-group rounded">
+                @foreach($testseries->tests as $test)
+                    <li class="list-group-item list-group-item-{{$test->testable->colourClass}}">
+                        <a href="{{route($test->testable->routeName.".show",["id"=>$test->id])}}">{{$test->name}}</a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </div>
 @endsection

@@ -2,9 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class MultiWordTestResult extends Model
+class MultiWordTestResult extends TestResultModel
 {
-    //
+    protected $fillable = ["word_test_word_id"];
+
+    function wordTestWord()
+    {
+        return $this->belongsTo("App\WordTestWord");
+    }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\CRUD;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Rules\Owns;
+use App\Test;
 use App\TestSeries;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -133,5 +135,38 @@ class TestSeriesController extends Controller
         TestSeries::destroy($id);
 
         return redirect(route("test-series.index"))->with('flash_message', 'Test Series deleted!');
+    }
+
+
+    public function setupTest(Request $request, $id)
+    {
+        $allTests = Test::get();
+
+        $testSeries = TestSeries::findOrFail($id);
+        $currentTests = $testSeries->tests;
+
+        $unusedTests = $allTests->diff($currentTests);
+
+        return view("crud.test-series.add-test",
+            ["testSeries" => $testSeries, "currentTests" => $currentTests, "unusedTests" => $unusedTests]);
+
+    }
+
+    public function saveSetupTest(Request $request, $id)
+    {
+
+        $this->validate($request, [
+            'name.*' => [new Owns(Test::class)]
+        ]);
+
+        $testSeries = TestSeries::findOrFail($id);
+
+        $testSeries->tests()->detach();
+
+
+        $testSeries->tests()->attach($request->name);
+
+        return redirect()->route("test-series.index");
+
     }
 }

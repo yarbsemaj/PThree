@@ -2,9 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class MapTestResult extends Model
+class MapTestResult extends TestResultModel
 {
-    //
+    protected $fillable = ["x", "y", "map_pin_id"];
+
+    function mapPins()
+    {
+        return $this->hasMany("App/MapPin");
+    }
+
 }

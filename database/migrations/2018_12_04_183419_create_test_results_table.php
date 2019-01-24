@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTestResultsTable extends Migration
 {
@@ -15,8 +15,8 @@ class CreateTestResultsTable extends Migration
     {
         Schema::create('test_results', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("test_series_id");
-            $table->integer("test_participant");
+            $table->integer("test_id");
+            $table->integer("test_participant_id");
             $table->longText("testresultsable_type");
             $table->integer("testresultsable_id");
             $table->timestamps();
