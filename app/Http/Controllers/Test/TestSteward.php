@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Test;
 
 
+use App\Country;
 use App\PoliceForce;
 use App\RouteIntoRole;
 use App\TestParticipant;
@@ -23,10 +24,14 @@ class TestSteward
     {
         $testSeries = TestSeries::where("url_token", $testToken)->firstOrFail();
         $policeForce = PoliceForce::all();
+        $country = Country::all();
         $routeIntoRole = RouteIntoRole::all();
 
         return view("test.start-series",
-            ["testSeries" => $testSeries, "policeForce" => $policeForce, "routeIntoRole" => $routeIntoRole]);
+            ["testSeries" => $testSeries,
+                "policeForce" => $policeForce,
+                "routeIntoRole" => $routeIntoRole,
+                "country" => $country]);
     }
 
     function store(Request $request, $testToken)
@@ -38,6 +43,7 @@ class TestSteward
         $request->validate([
             "policeForce" => "required",
             "routeIntoRole" => "required",
+            "country" => "required",
             "training" => "required",
             "yearsInRole" => "required|between:0,100"]);
 
@@ -45,7 +51,9 @@ class TestSteward
         $participant = new TestParticipant();
         $policeForce = PoliceForce::firstOrCreate(["name" => $request->policeForce]);
         $routeIntoRole = RouteIntoRole::firstOrCreate(["name" => $request->routeIntoRole]);
+        $country = Country::firstOrCreate(["name" => $request->country]);
 
+        $participant->country()->associate($country);
         $participant->policeForce()->associate($policeForce);
         $participant->routeIntoRole()->associate($routeIntoRole);
 

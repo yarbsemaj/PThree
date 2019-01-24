@@ -9,6 +9,7 @@
 namespace App\Http\View\Composers;
 
 
+use App\Country;
 use App\PoliceForce;
 use App\RouteIntoRole;
 use App\Test;
@@ -40,9 +41,14 @@ class ResultsComposer
             $yearsInRole[$i] = $i . " years";
         }
 
-        $testParticipants = $test->testResults()->groupBy("test_participant_id")->with("testParticipant")->get(["test_participant_id"])->pluck("testParticipant.token", "testParticipant.id");
+        $testParticipants = $test->testResults()
+            ->groupBy("test_participant_id")
+            ->with("testParticipant")
+            ->get(["test_participant_id"])
+            ->pluck("testParticipant.token", "testParticipant.id");
 
         $view->with('policeForce', PoliceForce::all()->pluck("name", "id"));
+        $view->with('country', Country::all()->pluck("name", "id"));
         $view->with('routeIntroRole', RouteIntoRole::all()->pluck("name", "id"));
         $view->with('training', $training);
         $view->with('yearInRole', $yearsInRole);

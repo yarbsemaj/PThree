@@ -2,7 +2,6 @@
 
 @section("title", $testSeries->name)
 
-
 @section("card-body")
 
     @if ($errors->any())
@@ -18,6 +17,10 @@
         your part of.</h4>
 
     {!! Form::open(['url' => route("test.store",["url_token"=>$testSeries->url_token])]) !!}
+    <div class="form-group">
+        <h5>What country is your police force located?</h5>
+        {!! Form::select('country',array_merge([""=>""],$country->pluck('name', 'name')->toArray()),null,["class"=>"chosenFreeText","required"=>"true"]); !!}
+    </div>
         <div class="form-group">
             <h5>What police force are you a member of?</h5>
             {!! Form::select('policeForce',array_merge([""=>""],$policeForce->pluck('name', 'name')->toArray()),null,["class"=>"chosenFreeText","required"=>"true"]); !!}

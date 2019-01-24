@@ -7,6 +7,7 @@
             <th>ID</th>
             <th>Test Series</th>
             <th>Police Force</th>
+            <th>Country</th>
             <th>Route Into Role</th>
             <th>Options</th>
         </tr>
@@ -20,6 +21,9 @@
                 </td>
                 <td>
                     {{$datum->testSeries->name}}
+                </td>
+                <td>
+                    {{$datum->country->name}}
                 </td>
                 <td>
                     {{$datum->policeForce->name}}

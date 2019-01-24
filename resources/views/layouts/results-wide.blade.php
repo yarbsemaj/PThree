@@ -14,6 +14,10 @@
                             {{ Form::select("routeIntoRole[]", $routeIntroRole,request()->routeIntoRole,['multiple'=>true, "class"=>"choosen"]) }}
                         </div>
                         <div class="form-group">
+                            <label>Country</label>
+                            {{ Form::select("country[]",$country,request()->country,['multiple'=>true, "class"=>"choosen"]) }}
+                        </div>
+                        <div class="form-group">
                             <label>Police Force</label>
                             {{ Form::select("policeForce[]",$policeForce,request()->policeForce,['multiple'=>true, "class"=>"choosen"]) }}
                         </div>

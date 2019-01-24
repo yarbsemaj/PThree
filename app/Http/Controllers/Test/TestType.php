@@ -62,6 +62,16 @@ abstract class TestType extends Controller
             });
         }
 
+        if ($request->country != null) {
+            $results->where(function ($query) use ($request) {
+                foreach ($request->country as $country) {
+                    $query = $query->orWhereHas('testParticipant', function ($query) use ($country) {
+                        $query->where('country_id', '=', $country);
+                    });
+                }
+            });
+        }
+
         if ($request->policeForce != null) {
             $results->where(function ($query) use ($request) {
                 foreach ($request->policeForce as $policeForce) {
