@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="card-columns">
+    <div class="justify-content-center">
+        <div class="card-deck">
             <div class="card">
                 <div class="card-header">Test Types</div>
                 <div class="card-body">
@@ -12,6 +12,9 @@
                         <li class="list-group-item"><a href="{{route("free-text.index")}}">Free Text Question</a></li>
                         <li class="list-group-item"><a href="{{route("order.index")}}">Order Test</a></li>
                         <li class="list-group-item"><a href="{{route("word.index")}}">Word Selection Test</a></li>
+                        <li class="list-group-item"><a href="{{route("image-select.index")}}">Image Selection Test</a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
