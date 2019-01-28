@@ -54,6 +54,14 @@ Route::group(["namespace" => "Test"], function () {
         Route::get('/results/{id}', 'WordTestController@getResult')->name("results");
         Route::get('/results/{id}/data.json', 'WordTestController@getResultsData')->name("results.data");
     });
+
+    Route::resource('image-select', 'ImageSelectTestController');
+    Route::group(["as" => "image-select.", "prefix" => "image-select"], function () {
+        Route::get('image/{file}', 'ImageSelectTestController@image')->name("image");
+        Route::get('/preview/{id}', 'ImageSelectTestController@displayTest')->name("preview");
+        Route::get('/results/{id}', 'ImageSelectTestController@getResult')->name("results");
+        Route::get('/results/{id}/data.json', 'ImageSelectTestController@getResultsData')->name("results.data");
+    });
 });
 
 

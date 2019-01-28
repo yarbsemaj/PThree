@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Test;
 
-use App\MultiWordTest;
-use App\MultiWordTestResult;
+use App\ImageSelectTest;
+use App\ImageSelectTestResult;
 use App\Test;
 use App\TestParticipant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
-class WordTestController extends TestType
+class ImageSelectTestController extends TestType
 {
 
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('owns:Test')->except(['index', 'create', 'store']);
-        $this->middleware('testType:MultiWordTest')->except(['index', 'create', 'store']);
+        $this->middleware('auth')->except(['image']);
+        $this->middleware('owns:Test')->except(['index', 'create', 'store', 'image']);
+        $this->middleware('testType:ImageSelectTest')->except(['index', 'create', 'store', 'image']);
     }
 
     /**
@@ -31,7 +32,7 @@ class WordTestController extends TestType
         $keyword = $request->get('search');
         $perPage = 25;
 
-        $tests = Test::where("user_id", "=", Auth::id())->where("testable_type", "=", "App\MultiWordTest");
+        $tests = Test::where("user_id", "=", Auth::id())->where("testable_type", "=", "App\ImageSelectTest");
 
         if (!empty($keyword)) {
             $tests = $tests->where('name', 'LIKE', "%$keyword%");
@@ -39,7 +40,7 @@ class WordTestController extends TestType
 
         $tests = $tests->latest()->paginate($perPage);
 
-        return view('crud.word.list', ["data" => $tests, "name" => "Word", "search" => $keyword]);
+        return view('crud.image-select.list', ["data" => $tests, "name" => "Image Select Test", "search" => $keyword]);
     }
 
     /**
@@ -49,7 +50,7 @@ class WordTestController extends TestType
      */
     public function create()
     {
-        return view('crud.word.create', ["url" => route("word.index")]);
+        return view('crud.image-select.create', ["url" => route("image-select.index")]);
     }
 
     /**
@@ -64,22 +65,32 @@ class WordTestController extends TestType
     {
         $this->validate($request, [
             'name' => 'required',
-            'words' => 'required',
+            'images' => 'required',
+            'images.*' => 'image',
             'max' => "required|numeric|min:0"
         ]);
 
         $data = $request->all();
-        $words = collect($data["words"]);
 
-        $words = $words->map(function ($item, $key) {
-            return ["name" => $item];
-        });
+        $images = $request->images;
 
-        $orderTest = MultiWordTest::create($data);
+        $imageData = array();
 
-        $orderTest->wordTestWords()->createMany($words->toArray());
+        foreach ($images as $image) {
+            $photoName = $image->store('image-select');
 
-        return redirect(route("word.index"))->with('flash_message', 'Word Test added!');
+            list($folder, $filename) = explode("/", $photoName);
+
+            $imageData[] = ["image" => $filename];
+        }
+
+
+        $test = ImageSelectTest::create($data);
+
+        $test->imageSelectImages()->createMany($imageData);
+
+
+        return redirect(route("image-select.index"))->with('flash_message', 'Word Test added!');
     }
 
     /**
@@ -93,7 +104,7 @@ class WordTestController extends TestType
     {
         $multiWord = Test::findOrFail($id)->testable;
 
-        return view('crud.word.show', ['test' => $multiWord]);
+        return view('crud.image-select.show', ['test' => $multiWord]);
     }
 
     /**
@@ -107,8 +118,8 @@ class WordTestController extends TestType
     {
         $data = Test::findOrFail($id)->testable;
 
-        return view('crud.word.edit', array_merge(compact('data'),
-            ["url" => route("word.update", ["id" => $id])]));
+        return view('crud.image-select.edit', array_merge(compact('data'),
+            ["url" => route("image-select.update", ["id" => $id])]));
     }
 
     /**
@@ -124,29 +135,35 @@ class WordTestController extends TestType
     {
 
         $this->validate($request, [
-                'name' => 'required',
-                'words' => 'required',
-                'max' => "required|numeric|min:0"]
-        );
-
-        $wordTest = Test::findOrFail($id)->testable;
+            'name' => 'required',
+            'images' => 'required',
+            'images.*' => 'image',
+            'max' => "required|numeric|min:0"
+        ]);
 
         $data = $request->all();
 
-        $wordTest->update($data);
+        $images = $request->images;
 
-        $wordTest->wordTestWords()->delete();
+        $imageData = array();
 
-        $words = collect($data["words"]);
+        foreach ($images as $image) {
+            $photoName = $image->store('image-select');
 
-        $words = $words->map(function ($item, $key) {
-            return ["name" => $item];
-        });
+            list($folder, $filename) = explode("/", $photoName);
 
-        $wordTest->wordTestWords()->createMany($words->toArray());
+            $imageData[] = ["image" => $filename];
+        }
 
+        $test = Test::findOrFail($id)->testable;
 
-        return redirect(route("word.index"))->with('flash_message', 'Order Test updated!');
+        $test->update($data);
+
+        $test->imageSelectImages()->delete();
+
+        $test->imageSelectImages()->createMany($imageData);
+
+        return redirect(route("image-select.index"))->with('flash_message', 'Order Test updated!');
     }
 
     /**
@@ -160,7 +177,7 @@ class WordTestController extends TestType
     {
         Test::findOrFail($id)->testable->delete();
 
-        return redirect(route("word.index"))->with('flash_message', 'Word deleted!');
+        return redirect(route("image-select.index"))->with('flash_message', 'Word deleted!');
     }
 
     /**
@@ -174,7 +191,7 @@ class WordTestController extends TestType
     {
         $map = Test::findOrFail($id)->testable;
 
-        return view("test.word.index", ["test" => $map]);
+        return view("test.image-select.index", ["test" => $map]);
     }
 
     /**
@@ -188,14 +205,14 @@ class WordTestController extends TestType
     public function storeResult(Request $request, $id, TestParticipant $participant): void
     {
         $test = Test::find($id);
-        $wordTest = $test->testable;
+        $imageTest = $test->testable;
 
-        $request->validate(["words" => "required"],
-            ["words.*" => "required|numeric|between:0," . $wordTest->wordTestWords->count()]);
+        $request->validate(["images" => "required"],
+            ["images.*" => "required|numeric|between:0," . $imageTest->imageSelectImages->count()]);
 
-        foreach ($request->words as $word) {
-            $results = MultiWordTestResult::create([
-                    "word_test_word_id" => $wordTest->wordTestWords[$word]->id]
+        foreach ($request->images as $image) {
+            $results = ImageSelectTestResult::create([
+                    "image_select_image_id" => $imageTest->imageSelectImages[$image]->id]
             );
 
             $results->testResult()->create(["test_participant_id" => $participant->id, "test_id" => $id]);
@@ -213,7 +230,7 @@ class WordTestController extends TestType
     {
         $test = Test::findOrFail($id)->testable;
 
-        return view("test.word.results", ["test" => $test]);
+        return view("test.image-select.results", ["test" => $test]);
     }
 
 
@@ -227,17 +244,23 @@ class WordTestController extends TestType
 
         $test = Test::findOrFail($id);
 
-        $words = $test->testable->wordTestWords;
+        $images = $test->testable->imageSelectImages;
 
-        $count = [["Word", "Responses"]];
-        foreach ($words as $word) {
+        $count = [];
+        foreach ($images as $image) {
             ;
-            $wordCount = $result->where("word_test_word_id", $word->id)->count();
-            $row[] = [$word->name, $wordCount];
+            $imgCount = $result->where("image_select_image_id", $image->id)->count();
+            $row[] = ["Image " . $image->id, $imgCount,
+                "<img class='img-fluid' style='max-height:300px' src='" . route("image-select.image", ["image" => $image->image]) . "'>"];
         }
         $count = array_merge($count, $row);
 
         return $count;
+    }
+
+    public function image(Request $request, $imageURL)
+    {
+        return response()->file(Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . "image-select/" . $imageURL);
     }
 
 }

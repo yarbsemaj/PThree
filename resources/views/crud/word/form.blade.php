@@ -14,7 +14,7 @@
     </select>
 </div>
 
-<label for="max">The maximum number of words that can be selected, leav at 0 for no limit</label>
+<label for="max">The maximum number of words that can be selected, leave at 0 for no limit</label>
 <input type="number" min="0" step="1" name="max" id="max" value="{{$data->max ?? "0"}}" class="form-control">
 
 <script>
