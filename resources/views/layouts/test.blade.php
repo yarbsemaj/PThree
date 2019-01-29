@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <div class="col-8 mx-auto">
-    <div class="card">
+            <div class="card" id="test-body">
         <div class="card-header">
             @yield("card-header")
         </div>
@@ -17,3 +17,7 @@
     </div>
     </div>
 @endsection
+
+@push("scripts")
+    <script src="{{asset("js/mouseTracking.js")}}"></script>
+@endpush

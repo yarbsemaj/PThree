@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Test;
 
 
 use App\Country;
+use App\MousePosition;
 use App\PoliceForce;
 use App\RouteIntoRole;
 use App\TestParticipant;
@@ -106,8 +107,31 @@ class TestSteward
             $controllerName = $test->testable->controllerClass;
             $controller = new $controllerName;
             $controller->storeResult($request, $test->id, $participant);
+        } else {
+            return response('', 404);
+        }
+    }
+
+    function saveMouse(Request $request, $participantToken)
+    {
+        $participant = TestParticipant::where("token", "=", $participantToken)->firstOrFail();
+        $testSeries = $participant->testSeries;
+        $tests = $testSeries->tests;
+        if ($tests->count() > $participant->test_step) {
+            $test = $tests->get($participant->test_step);
+
+            $mouseData = collect($request->mousePositions);
+
+            $mouseData = $mouseData->map(function ($mouse) use ($test, $participant) {
+                $mouse['test_id'] = $test->id;
+                $mouse['test_participant_id'] = $participant->id;
+                return $mouse;
+            });
+
+            MousePosition::insert($mouseData->toArray());
             $participant->test_step++;
             $participant->save();
+
         } else {
             return response('', 404);
         }

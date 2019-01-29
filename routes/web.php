@@ -80,5 +80,8 @@ Route::group(["prefix" => "test", "as" => "test.","namespace"=>"Test"], function
     Route::get("/underway/{participantToken}", "TestSteward@getTest")->name("display");
     Route::post("/underway/{participantToken}", "TestSteward@saveTest")->name("save");
 
+    Route::post("/underway/{participantToken}/mouse", "TestSteward@saveMouse")->name("mouse");
+
+
 });
 

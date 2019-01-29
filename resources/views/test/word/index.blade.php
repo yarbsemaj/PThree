@@ -21,8 +21,7 @@
     <a id="submit" onclick="
     axios.post('', $('#answerForm').serialize())
             .then(function (response) {
-                window.onbeforeunload = null;
-                window.location.href = '';
+                             submitMouse();
             })" class="btn btn-outline-success btn-lg float-right">Save and Continue <i
                 class="far fa-hand-point-right"></i></a>
 @endsection
