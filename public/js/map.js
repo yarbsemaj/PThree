@@ -53,10 +53,14 @@ function setupCanvas() {
     $("#submit").click(function (e) {
         axios.post('', {pins})
             .then(function (response) {
-                window.onbeforeunload = null;
-                window.location.href = '';
+                submitMouse();
             })
     });
+}
+
+
+function submit() {
+
 }
 
 

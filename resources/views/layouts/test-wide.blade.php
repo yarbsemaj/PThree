@@ -1,7 +1,7 @@
 @extends ("layouts.app")
 @section('content')
     <div class="container" style="max-width:1500px">
-        <div class="card">
+        <div class="card" id="test-body">
             <div class="card-header">
                 @yield("card-header")
             </div>
@@ -13,3 +13,7 @@
         </div>
     </div>
 @endsection
+
+@push("scripts")
+    <script src="{{asset("js/mouseTracking.js")}}"></script>
+@endpush

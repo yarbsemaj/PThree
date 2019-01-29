@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Test;
 
 
 use App\Http\Controllers\Controller;
+use App\MousePosition;
 use App\Test;
 use App\TestParticipant;
 use Illuminate\Http\Request;
@@ -129,6 +130,20 @@ abstract class TestType extends Controller
 
         return $results;
     }
+
+    public function getMouseData(Request $request, $testID, $participantID)
+    {
+        return MousePosition::where("test_id", "=", $testID)->where("test_participant_id", "=", $participantID)->get();
+    }
+
+    /**
+     * Returns a view with the mouse data overlay
+     * @param Request $request
+     * @param $testID
+     * @param $participantID
+     * @return View
+     */
+    public abstract function getMouse(Request $request, $testID, $participantID): View;
 
 
 }

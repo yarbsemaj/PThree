@@ -1,4 +1,4 @@
-@extends ("layouts.test")
+@extends ("layouts.test.mouse-display")
 
 @section("card-header","Please answer the following question")
 @section('card-body')
@@ -10,11 +10,6 @@
 @endsection
 
 @section("card-footer")
-    <a id="submit" onclick="
-    axios.post('', $('#answerForm').serialize())
-            .then(function (response) {
-                              submitMouse();
-
-            })" class="btn btn-outline-success btn-lg float-right">Save and Continue <i
+    <a id="submit" class="btn btn-outline-success btn-lg float-right">Save and Continue <i
                 class="far fa-hand-point-right"></i></a>
 @endsection

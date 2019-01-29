@@ -248,4 +248,16 @@ class OrderTestController extends TestType
         return array_merge([array_merge(["Position"], $wordName->toArray())], $count);
     }
 
+    /**
+     * Returns a view with the mouse data overlay
+     * @param Request $request
+     * @param $testID
+     * @param $participantID
+     * @return View
+     */
+    public function getMouse(Request $request, $testID, $participantID): View
+    {
+        $test = Test::findOrFail($testID)->testable;
+        return view("test.order.mouse", ["test" => $test]);
+    }
 }

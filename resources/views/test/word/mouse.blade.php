@@ -1,4 +1,4 @@
-@extends ("layouts.test")
+@extends ("layouts.test.mouse-display")
 
 @section("card-header","Please answer the following question")
 @section('card-body')
@@ -18,28 +18,9 @@
 @endsection
 
 @section("card-footer")
-    <a id="submit" onclick="
-    axios.post('', $('#answerForm').serialize())
-            .then(function (response) {
-                             submitMouse();
-            })" class="btn btn-outline-success btn-lg float-right">Save and Continue <i
+    <a id="submit" class="btn btn-outline-success btn-lg float-right">Save and Continue <i
                 class="far fa-hand-point-right"></i></a>
 @endsection
-
-@push("scripts")
-    <script>
-        $(function () {
-            var limit = {{$test->max}};
-            if (limit != 0) {
-                $('input.single-checkbox').on('change', function (evt) {
-                    if ($('input.single-checkbox:checked').length > limit) {
-                        this.checked = false;
-                    }
-                });
-            }
-        });
-    </script>
-@endpush()
 
 @push("styles")
     <link href="{{asset("css/checbox.css")}}" rel="stylesheet"/>
