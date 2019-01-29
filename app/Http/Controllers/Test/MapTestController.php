@@ -260,4 +260,16 @@ class MapTestController extends TestType
         return $return;
     }
 
+    /**
+     * Returns a view with the mouse data overlay
+     * @param Request $request
+     * @param $testID
+     * @param $participantID
+     * @return View
+     */
+    public function getMouse(Request $request, $testID, $participantID): View
+    {
+        $test = Test::findOrFail($testID)->testable;
+        return view("test.map.mouse", ["test" => $test]);
+    }
 }

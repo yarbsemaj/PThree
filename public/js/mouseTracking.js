@@ -23,7 +23,7 @@ function mouseLoop() {
             addMousePositionToStack(null)
         }
         mouseLoop();
-    }, 1000);
+    }, 100);
 }
 
 function getMouseX() {

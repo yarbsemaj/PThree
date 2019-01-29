@@ -240,4 +240,10 @@ class WordTestController extends TestType
         return $count;
     }
 
+    public function getMouse(Request $request, $testID, $participantID): View
+    {
+        $test = Test::findOrFail($testID)->testable;
+        return view("test.word.mouse", ["test" => $test]);
+    }
+
 }

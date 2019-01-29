@@ -215,4 +215,10 @@ class FreeTextTestController extends TestType
         return ["tagCloud" => $wordCount, "answers" => $answers];
     }
 
+    public function getMouse(Request $request, $testID, $participantID): View
+    {
+        $test = Test::findOrFail($testID)->testable;
+        return view("test.free-text.mouse", ["test" => $test]);
+    }
+
 }

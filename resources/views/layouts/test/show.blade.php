@@ -27,6 +27,7 @@
                     <th>Force</th>
                     <th>Occupation</th>
                     <th>Date</th>
+                    <th>Mouse Tracking</th>
                 </tr>
                 </thead>
                 @foreach($testParticipants as $testParticipant)
@@ -44,6 +45,12 @@
                         </td>
                         <td>
                             {{$testParticipant->updated_at}}
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-primary"
+                               href="{{route($test->routeName.".mouse",
+                               ["id"=>$test->test->id,"participantID"=>$testParticipant->id])}}">
+                                <i class="fas fa-mouse-pointer"></i></a>
                         </td>
                     </tr>
                 @endforeach
