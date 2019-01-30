@@ -52,7 +52,34 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        @auth()
+                            <li class="nav-item">
+                                <a class="nav-link @if(request()->route()->getName() == "home") active @endif"
+                                   href="{{route("home")}}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @if(request()->route()->getName() == "test-series.index") active @endif"
+                                   href="{{route("test-series.index")}}">Test Series</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @if(request()->route()->getName() == "test-participant.index") active @endif"
+                                   href="{{route("test-participant.index")}}">Participants</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Test Types
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{route("map.index")}}">Map Test</a>
+                                    <a class="dropdown-item" href="{{route("free-text.index")}}">Free Text Question</a>
+                                    <a class="dropdown-item" href="{{route("order.index")}}">Order Test</a>
+                                    <a class="dropdown-item" href="{{route("word.index")}}">Word Selection Test</a>
+                                    <a class="dropdown-item" href="{{route("image-select.index")}}">Image Selection
+                                        Test</a>
+                                </div>
+                            </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -60,11 +87,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Admin Login') }}</a>
                             </li>
                             <li class="nav-item">
                                 @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Creat your Own') }}</a>
                                 @endif
                             </li>
                         @else
