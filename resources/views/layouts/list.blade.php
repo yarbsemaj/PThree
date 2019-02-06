@@ -35,6 +35,7 @@
                                      src="{{asset("img/srug.png")}}">
                             </div>
                         @endif
+                        {!!$data->links()!!}
                     </div>
                 </div>
             </div>
