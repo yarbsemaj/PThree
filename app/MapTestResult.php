@@ -5,10 +5,17 @@ namespace App;
 class MapTestResult extends TestResultModel
 {
     protected $fillable = ["x", "y", "map_pin_id", "reason"];
+    protected $appends = ["pinIndex"];
 
-    function mapPins()
+    function mapPin()
     {
-        return $this->hasMany("App/MapPin");
+        return $this->belongsTo("App\MapPin");
+    }
+
+    function getPinIndexAttribute()
+    {
+
+        return $this->testResult->test->testable->mapPins->search($this->mapPin);
     }
 
 }

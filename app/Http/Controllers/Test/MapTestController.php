@@ -211,9 +211,9 @@ class MapTestController extends TestType
         $mapTest = $test->testable;
 
         $request->validate([
-            "pins.*.x" => "required|numeric|between:0.0,1.0",
-            "pins.*.y" => "required|numeric|between:0.0,1.0",
-            "pins.*.type" => "required|numeric|between:0," . $mapTest->mapPins->count()]);
+            "dataToDisplay.*.x" => "required|numeric|between:0.0,1.0",
+            "dataToDisplay.*.y" => "required|numeric|between:0.0,1.0",
+            "dataToDisplay.*.type" => "required|numeric|between:0," . $mapTest->mapPins->count()]);
 
 
         $pins = $mapTest->mapPins;
@@ -246,18 +246,13 @@ class MapTestController extends TestType
     {
         $query = parent::getResultsData($request, $id);
 
-        $results = $query->with("testresultsable")->get();
+        $query = $query->with(["test", "testresultsable.testResult.testParticipant",
+            "testresultsable.testResult.testParticipant.testSeries"]);
 
-        $results = $results->pluck("testresultsable");
 
-        if ($request->mapPins != null) {
-            $return = collect();
-            foreach ($request->mapPins as $mapPin)
-                $return = $results->where('map_pin_id', $mapPin)->union($return);
-        } else {
-            $return = $results;
-        }
-        return $return;
+        $results = $query->get()->pluck("testresultsable");
+
+        return $results;
     }
 
     /**
