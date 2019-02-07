@@ -21,6 +21,32 @@
         </div>
     </div>
 
+    <div class="modal" tabindex="-1" role="dialog" id="reason">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rational</h5>
+                    <button type="button" class="close reason-clear" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Could you provide more information on your rational?</h4>
+                    You can leave this blank if you would like.
+                    <input type="text" class="form-control" id="reason-input" placeholder="Rational (Optional)">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary reason-clear" data-dismiss="modal"
+                            id="add-pin">Add pin
+                    </button>
+                    <button type="button" class="btn btn-outline-danger reason-clear" data-dismiss="modal">Cancel and
+                        remove pin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if($test->test->description)
         <div class="modal show" tabindex="-1" role="dialog" id="descriptionModal">
             <div class="modal-dialog" role="document">
@@ -48,10 +74,10 @@
                 class="far fa-hand-point-right"></i></a>
 @endsection
 @push("scripts")
-    <script src="{{ asset('js/map.js') }}"></script>
     <script>
         $(document).ready(function () {
             $('#descriptionModal').modal('show');
         });
     </script>
+    <script src="{{ asset('js/map.js') }}"></script>
 @endpush()

@@ -219,10 +219,11 @@ class MapTestController extends TestType
         $pins = $mapTest->mapPins;
 
         foreach ($request->pins as $pin) {
-            $results = MapTestResult::create(
-                ["x" => $pin["x"],
+            $results = MapTestResult::create([
+                "x" => $pin["x"],
                     "y" => $pin["y"],
-                    "map_pin_id" => $pins[$pin["type"]]->id]);
+                "map_pin_id" => $pins[$pin["type"]]->id,
+                "reason" => $pin["reason"]]);
             $results->testResult()->create(["test_participant_id" => $participant->id, "test_id" => $id]);
         }
     }
@@ -236,7 +237,6 @@ class MapTestController extends TestType
     public function getResult(Request $request, $id): View
     {
         $map = Test::findOrFail($id)->testable;
-
 
         return view("test.map.results", ["test" => $map]);
     }

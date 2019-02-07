@@ -10,6 +10,8 @@ var pinType = 0;
 var closnes = 0.02;
 var pins = [];
 
+var clickPosition;
+
 
 $(function(){
     canvas = document.getElementById('map');
@@ -25,20 +27,20 @@ function setupCanvas() {
     $("#loading").hide();
     drawScreen();
     $(window).resize(function () {
-        drawScreen()
+        drawScreen();
     });
 
     $("#map").click(function(e){
         pinsRemoved = false;
-        cursorPos = getCursorPosition(canvas,e);
+        clickPosition = getCursorPosition(canvas, e);
         pins.forEach(function(element, index){
-            if(Math.abs(cursorPos.x-element.x)<closnes&&Math.abs(cursorPos.y-element.y)<closnes){
+            if (Math.abs(clickPosition.x - element.x) < closnes && Math.abs(clickPosition.y - element.y) < closnes) {
                 pins.splice(index,1);
                 pinsRemoved = true;
             }
         });
         if(!pinsRemoved){
-            pins.push(getCursorPosition(canvas,e));
+            $("#reason").modal("show");
         }
         drawScreen();
     });
@@ -55,6 +57,16 @@ function setupCanvas() {
             .then(function (response) {
                 submitMouse();
             })
+    });
+
+    $("#add-pin").click(function () {
+        clickPosition.reason = $("#reason-input").val();
+        pins.push(clickPosition);
+        drawScreen();
+    });
+
+    $(".reason-clear").click(function () {
+        $("#reason-input").val("");
     });
 }
 
