@@ -46,7 +46,9 @@ class TestSteward
             "routeIntoRole" => "required",
             "country" => "required",
             "training" => "required",
-            "yearsInRole" => "required|between:0,100"]);
+            "yearsInRole" => "required|between:0,100",
+            "g-recaptcha-response" => "required|recaptcha"],
+            ["g-recaptcha-response.required" => "Please confirm you are not a robot."]);
 
 
         $participant = new TestParticipant();

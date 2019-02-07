@@ -25,28 +25,8 @@
     <script src="{{ asset('js/map_results.js') }}"></script>
     <script src="{{ asset('js/heatmap.min.js') }}"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-
+    
     <script>
         var resultURL = "{{route("map.results.data",["id"=>$test->test->id])}}?{!!http_build_query(request()->all())!!}";
-
-        function formatState(state) {
-
-            var baseUrl = "/img/pins";
-            var state = $(
-                '<span><img src="' + baseUrl + '/' + $(".chosenPins [value='" + state.id + "']").index() + '.png" ' +
-                'style="width: 20px; height: 20px" /> ' + state.text + '</span>'
-            );
-            return state;
-        }
-
-        $(document).ready(function () {
-            $('.chosenPins').select2({
-                placeholder: 'All',
-                width: '100%',
-                templateResult: formatState,
-                templateSelection: formatState,
-            });
-        });
     </script>
 @endpush()
