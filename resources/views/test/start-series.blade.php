@@ -47,13 +47,21 @@
                 @endfor
             </select>
         </div>
+    <div class="input-group justify-content-center">
+        <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}">
+        </div>
+    </div>
+    <br>
     <div class="input-group">
         <button class="btn-outline-success btn-block btn" type="submit">Begin <i class="fas fa-arrow-right"></i>
         </button>
         {!! Form::close() !!}
-
     </div>
+@endsection
 
+@push("scripts")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script>
         $(document).ready(function () {
             $('.chosen').select2({
@@ -67,10 +75,6 @@
             });
         });
     </script>
-@endsection
-
-@push("scripts")
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 @endpush
 
 @push("styles")
