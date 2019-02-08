@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 class TestSeries extends OwnedModel
 {
 
-    protected $fillable = ["name", "description"];
+    protected $fillable = ["name", "description", "consent_form"];
 
     public function user()
     {

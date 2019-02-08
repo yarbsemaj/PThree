@@ -14,7 +14,6 @@ var closnes = 0.02;
 
 var heatmap;
 
-
 $(function () {
     $.getJSON(resultURL, function (data) {
         console.log(data);
@@ -116,7 +115,6 @@ function getCursorPosition(canvas, event) {
     return {"x": x / canvas.width, "y": y / canvas.height}
 }
 
-
 function loadPins() {
     for (var i = 0; i < 9; i++) {
         pin[i] = new Image();
@@ -132,7 +130,6 @@ function drawScreen() {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     drawPins();
 }
-
 
 function drawHeatMap() {
     normalisedArray = [];

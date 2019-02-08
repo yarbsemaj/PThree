@@ -1,7 +1,10 @@
 <input class="form-control" type="text" value="{{$data->test->name ?? ""}}" name="name" required placeholder="Name">
 <br>
-<textarea required="required" name="description">{{$data->test->description ?? ""}}
+<div class="form-group">
+    <label>Description</label>
+    <textarea required="required" name="description">{{$testseries->description ?? ""}}
     </textarea>
+</div>
 <br>
 <div class="form-group">
     <label for="imageInput">Images</label>

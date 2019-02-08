@@ -87,7 +87,6 @@ class MapTestController extends TestType
 
         $map->mapPins()->createMany($mapPins->toArray());
 
-
         return redirect(route("map.index"))->with('flash_message', 'Map added!');
     }
 
@@ -159,7 +158,6 @@ class MapTestController extends TestType
 
         $map->mapPins()->createMany($mapPins->toArray());
 
-
         return redirect(route("map.index"))->with('flash_message', 'Map updated!');
     }
 
@@ -181,7 +179,6 @@ class MapTestController extends TestType
     {
         return response()->file(Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . "map/" . $imageURL);
     }
-
 
     /**
      * Returns the view the test
@@ -215,7 +212,6 @@ class MapTestController extends TestType
             "dataToDisplay.*.y" => "required|numeric|between:0.0,1.0",
             "dataToDisplay.*.type" => "required|numeric|between:0," . $mapTest->mapPins->count()]);
 
-
         $pins = $mapTest->mapPins;
 
         foreach ($request->pins as $pin) {
@@ -241,14 +237,12 @@ class MapTestController extends TestType
         return view("test.map.results", ["test" => $map]);
     }
 
-
     public function getResultsData(Request $request, $id)
     {
         $query = parent::getResultsData($request, $id);
 
         $query = $query->with(["test", "testresultsable.testResult.testParticipant",
             "testresultsable.testResult.testParticipant.testSeries"]);
-
 
         $results = $query->get()->pluck("testresultsable");
 

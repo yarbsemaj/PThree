@@ -9,14 +9,15 @@ use App\Test;
 use App\TestSeries;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TestSeriesController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('owns:TestSeries')->except(['index','create','store']);
+        $this->middleware('auth')->except(['consentForm']);
+        $this->middleware('owns:TestSeries')->except(['index', 'create', 'store', 'consentForm']);
     }
 
     /**
@@ -62,12 +63,17 @@ class TestSeriesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required'
-		]);
-        $requestData = $request->all();
+            'name' => 'required',
+            'consent_form' => 'required|file|mimes:pdf,doc,docx'
+        ]);
+        $consentForm = request()->file('consent_form')->store('consent_form');
 
+        list($folder, $filename) = explode("/", $consentForm);
 
-        TestSeries::create($requestData);
+        $data = $request->all();
+        $data["consent_form"] = $filename;
+
+        TestSeries::create($data);
 
         return redirect(route("test-series.index"))->with('flash_message', 'TestSeries added!');
     }
@@ -113,14 +119,20 @@ class TestSeriesController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
+            'consent_form' => 'required|file|mimes:pdf,doc,docx'
 		]);
-        $requestData = $request->all();
-        
-        $testseries = TestSeries::findOrFail($id);
-        $testseries->update($requestData);
+        $consentForm = request()->file('consent_form')->store('consent_form');
 
-        return redirect(route("test-series.index"))->with('flash_message', 'TestSeries updated!');
+        list($folder, $filename) = explode("/", $consentForm);
+
+        $data = $request->all();
+        $data["consent_form"] = $filename;
+
+        $testseries = TestSeries::findOrFail($id);
+        $testseries->update($data);
+
+        return redirect(route("test-series.index"))->with('flash_message', 'Test Series updated!');
     }
 
     /**
@@ -133,10 +145,8 @@ class TestSeriesController extends Controller
     public function destroy($id)
     {
         TestSeries::destroy($id);
-
         return redirect(route("test-series.index"))->with('flash_message', 'Test Series deleted!');
     }
-
 
     public function setupTest(Request $request, $id)
     {
@@ -144,12 +154,10 @@ class TestSeriesController extends Controller
 
         $testSeries = TestSeries::findOrFail($id);
         $currentTests = $testSeries->tests;
-
         $unusedTests = $allTests->diff($currentTests);
 
         return view("crud.test-series.add-test",
             ["testSeries" => $testSeries, "currentTests" => $currentTests, "unusedTests" => $unusedTests]);
-
     }
 
     public function saveSetupTest(Request $request, $id)
@@ -160,13 +168,14 @@ class TestSeriesController extends Controller
         ]);
 
         $testSeries = TestSeries::findOrFail($id);
-
         $testSeries->tests()->detach();
-
-
         $testSeries->tests()->attach($request->name);
 
         return redirect()->route("test-series.index");
+    }
 
+    public function consentForm(Request $request, $formURL)
+    {
+        return response()->file(Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . "consent_form/" . $formURL);
     }
 }

@@ -51,6 +51,13 @@
         <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}">
         </div>
     </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" required title="consent">
+        <label class="form-check-label">
+            I have read and agree to this
+            <a href="{{route("test-series.consent-form",["formURL"=>$testSeries->consent_form])}}">consent form.</a>
+        </label>
+    </div>
     <br>
     <div class="input-group">
         <button class="btn-outline-success btn-block btn" type="submit">Begin <i class="fas fa-arrow-right"></i>

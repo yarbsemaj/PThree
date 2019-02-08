@@ -215,8 +215,6 @@ class OrderTestController extends TestType
     public function getResult(Request $request, $id): View
     {
         $test = Test::findOrFail($id)->testable;
-
-
         return view("test.order.results", ["test" => $test]);
     }
 

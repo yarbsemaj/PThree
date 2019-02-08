@@ -8,7 +8,6 @@
 
 namespace App\Http\View\Composers;
 
-
 use App\Country;
 use App\PoliceForce;
 use App\RouteIntoRole;
@@ -17,7 +16,6 @@ use Illuminate\View\View;
 
 class ResultsComposer
 {
-
 
     /**
      * Bind data to the view.

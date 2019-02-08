@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\Test;
 
-
 use App\Country;
 use App\MousePosition;
 use App\PoliceForce;
@@ -16,7 +15,6 @@ use App\RouteIntoRole;
 use App\TestParticipant;
 use App\TestSeries;
 use Illuminate\Http\Request;
-
 
 class TestSteward
 {
@@ -40,16 +38,16 @@ class TestSteward
 
         $testSeries = TestSeries::where("url_token", $testToken)->firstOrFail();
 
-
         $request->validate([
             "policeForce" => "required",
             "routeIntoRole" => "required",
             "country" => "required",
             "training" => "required",
             "yearsInRole" => "required|between:0,100",
-            "g-recaptcha-response" => "required|recaptcha"],
-            ["g-recaptcha-response.required" => "Please confirm you are not a robot."]);
-
+            "g-recaptcha-response" => "required|recaptcha",
+            "consent" => "required"],
+            ["g-recaptcha-response.required" => "Please confirm you are not a robot.",
+                "consent.required" => "Please read and accept the consent form."]);
 
         $participant = new TestParticipant();
         $policeForce = PoliceForce::firstOrCreate(["name" => $request->policeForce]);
@@ -66,7 +64,6 @@ class TestSteward
         $participant->years_in_role = $request->yearsInRole;
 
         $participant->save();
-
 
         return redirect()->route("test.begin", ["participantToken" => $participant->token]);
     }

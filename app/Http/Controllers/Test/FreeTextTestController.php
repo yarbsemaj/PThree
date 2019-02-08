@@ -180,8 +180,6 @@ class FreeTextTestController extends TestType
     public function getResult(Request $request, $id): View
     {
         $test = Test::findOrFail($id)->testable;
-
-
         return view("test.free-text.results", ["test" => $test]);
     }
 

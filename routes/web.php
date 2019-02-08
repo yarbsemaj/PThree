@@ -21,8 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('test-series', 'CRUD\\TestSeriesController');
 Route::get('test-series/add-test/{id}', 'CRUD\\TestSeriesController@setupTest')->name("test-series.setup-test");
+Route::get('test-series/consent-form/{formURL}', 'CRUD\\TestSeriesController@consentForm')->name("test-series.consent-form");
 Route::post('test-series/add-test/{id}', 'CRUD\\TestSeriesController@saveSetupTest')->name("test-series.setup-test-save");;
-
 
 Route::group(["namespace" => "Test"], function () {
     Route::resource('map', 'MapTestController');
@@ -53,7 +53,6 @@ Route::group(["namespace" => "Test"], function () {
         Route::get('/mouse/{id}/{participantID}/data.json', 'OrderTestController@getMouseData')->name("mouse.data");
     });
 
-
     Route::resource('word', 'WordTestController');
     Route::group(["as" => "word.", "prefix" => "word"], function () {
         Route::get('/preview/{id}', 'WordTestController@displayTest')->name("preview");
@@ -74,7 +73,6 @@ Route::group(["namespace" => "Test"], function () {
     });
 });
 
-
 Route::resource('test-participant', 'CRUD\\TestParticipantController')->only([
     'index', 'show', 'destroy'
 ]);
@@ -91,7 +89,6 @@ Route::group(["prefix" => "test", "as" => "test.","namespace"=>"Test"], function
     Route::post("/underway/{participantToken}", "TestSteward@saveTest")->name("save");
 
     Route::post("/underway/{participantToken}/mouse", "TestSteward@saveMouse")->name("mouse");
-
 
 });
 

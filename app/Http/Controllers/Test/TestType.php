@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\Test;
 
-
 use App\Http\Controllers\Controller;
 use App\MousePosition;
 use App\Test;
@@ -45,7 +44,6 @@ abstract class TestType extends Controller
      * @return View
      */
     public abstract function getResult(Request $request, $id): View;
-
 
     public function getResultsData(Request $request, $id)
     {
@@ -127,7 +125,6 @@ abstract class TestType extends Controller
             });
         }
 
-
         return $results;
     }
 
@@ -144,6 +141,5 @@ abstract class TestType extends Controller
      * @return View
      */
     public abstract function getMouse(Request $request, $testID, $participantID): View;
-
 
 }
