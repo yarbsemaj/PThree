@@ -12,7 +12,6 @@ var pins = [];
 
 var clickPosition;
 
-
 $(function(){
     canvas = document.getElementById('map');
     ctx = canvas.getContext('2d');
@@ -69,12 +68,6 @@ function setupCanvas() {
         $("#reason-input").val("");
     });
 }
-
-
-function submit() {
-
-}
-
 
 function getCursorPosition(canvas, event) {
     var rect = canvas.getBoundingClientRect();

@@ -4,6 +4,9 @@
 @section('card-body')
     @markdown($testseries->description)
 
+    <a class="btn-primary btn btn-block"
+       href="{{route("test-series.consent-form",["formURL"=>$testseries->consent_form])}}">View consent form</a>
+    <br>
     <div class="card">
         <div class="card-body">{{route("test.index",["url_token"=>$testseries->url_token])}}</div>
     </div>
@@ -54,5 +57,4 @@
         </div>
     </div>
 @endsection
-
 

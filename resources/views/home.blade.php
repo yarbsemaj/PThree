@@ -14,7 +14,6 @@
                         <li class="list-group-item"><a href="{{route("word.index")}}">Word Selection Test</a></li>
                         <li class="list-group-item"><a href="{{route("image-select.index")}}">Image Selection Test</a>
                         </li>
-
                     </ul>
                 </div>
             </div>

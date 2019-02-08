@@ -1,7 +1,10 @@
 <input class="form-control" type="text" value="{{$map->test->name ?? ""}}" name="name" required placeholder="Name">
 <br>
-<textarea required="required" name="description">{{$map->test->description ?? ""}}
+<div class="form-group">
+    <label>Description</label>
+    <textarea required="required" name="description">{{$testseries->description ?? ""}}
     </textarea>
+</div>
 <br>
 <div class="form-group">
     <label for="mapInput">Map Image</label>

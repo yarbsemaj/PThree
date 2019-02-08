@@ -8,7 +8,6 @@ class ImageSelectTest extends TestModel
 {
     protected $fillable = ["name", "description", "max"];
 
-
     function imageSelectImages()
     {
         return $this->hasMany("App\ImageSelectImage");
