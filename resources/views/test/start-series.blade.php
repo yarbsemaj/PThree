@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" required title="consent">
+        <input class="form-check-input" type="checkbox" required name="consent">
         <label class="form-check-label">
             I have read and agree to this
             <a href="{{route("test-series.consent-form",["formURL"=>$testSeries->consent_form])}}">consent form.</a>
