@@ -6,8 +6,11 @@ use App\FreeTextTest;
 use App\FreeTextTestResult;
 use App\Test;
 use App\TestParticipant;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class FreeTextTestController extends TestType
@@ -24,7 +27,7 @@ class FreeTextTestController extends TestType
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(Request $request)
     {
@@ -45,7 +48,7 @@ class FreeTextTestController extends TestType
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function create()
     {
@@ -55,10 +58,10 @@ class FreeTextTestController extends TestType
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Validation\ValidationException
+     * @return RedirectResponse|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -78,7 +81,7 @@ class FreeTextTestController extends TestType
      *
      * @param  int $id
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function show($id)
     {
@@ -92,7 +95,7 @@ class FreeTextTestController extends TestType
      *
      * @param  int $id
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function edit($id)
     {
@@ -105,11 +108,11 @@ class FreeTextTestController extends TestType
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param  int $id
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Validation\ValidationException
+     * @return RedirectResponse|Redirector
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -118,7 +121,7 @@ class FreeTextTestController extends TestType
             'name' => 'required',
         ]);
 
-        $freeTextTest = Test::findOrFail($id)->testable;
+        $freeTextTest = Test::findOrFail($id);
 
         $data = $request->all();
 
@@ -132,7 +135,7 @@ class FreeTextTestController extends TestType
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function destroy($id)
     {

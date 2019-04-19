@@ -25,7 +25,7 @@ class FreeTextTest extends TestCase
      *
      * @return void
      */
-    public function test_add_test()
+    public function test_add_tes()
     {
         $this->actingAs($this->user)
             ->post(route('free-text.store'),
@@ -35,6 +35,25 @@ class FreeTextTest extends TestCase
         $this->actingAs($this->user)
             ->get(route('free-text.index'))
             ->assertSeeText('example-name');
+
+    }
+
+    public function test_user_test_isolation()
+    {
+        $this->actingAs($this->user)
+            ->post(route('free-text.store'),
+                ['name' => 'example-name', 'description' => 'example-description'])
+            ->assertRedirect(route('free-text.index'));
+
+        $this->actingAs(factory('App\User')->create())
+            ->get(route('free-text.index'))
+            ->assertDontSeeText('example-name');
+
+        $test = Test::where('name', 'example-name')->where('user_id', $this->user->id)->first();
+
+        $this->actingAs(factory('App\User')->create())
+            ->get(route('free-text.show', ['id' => $test->id]))
+            ->assertRedirect(route('home'));
 
     }
 
