@@ -21,7 +21,7 @@ class FreeTextTest extends TestCase
     }
 
     /**
-     * Adding the free text test.
+     * Adding the test.
      *
      * @return void
      */
@@ -39,7 +39,22 @@ class FreeTextTest extends TestCase
     }
 
     /**
-     * Adding the free text test.
+     * Adding the test when not logged in
+     *
+     * @return void
+     */
+    public function test_add_no_user_test()
+    {
+        $this->post(route('free-text.store'),
+            ['name' => 'example-name-no-user', 'description' => 'example-description'])
+            ->assertRedirect(route('login'));
+
+        $this->assertDatabaseMissing('tests', ['name' => 'example-name-no-user']);
+
+    }
+
+    /**
+     * Adding the test with name.
      *
      * @return void
      */
@@ -66,6 +81,25 @@ class FreeTextTest extends TestCase
 
         $test = Test::where('name', 'example-name')->where('user_id', $this->user->id)->first();
 
+        $this->actingAs(factory('App\User')->create())
+            ->put(route('free-text.update', ['id' => $test->id]),
+                ['name' => 'example-name-update', 'description' => 'example-description'])
+            ->assertRedirect(route('home'));
+
+        $this->assertDatabaseMissing('tests', ['name' => 'example-name-update']);
+
+
+    }
+
+    public function test_edit_for_another_user()
+    {
+        $this->actingAs($this->user)
+            ->post('free-text',
+                ['name' => 'example-name', 'description' => 'example-description'])
+            ->assertRedirect('free-text');
+
+        $test = Test::where('name', 'example-name')->where('user_id', $this->user->id)->first();
+
         $this->actingAs($this->user)
             ->put(route('free-text.update', ['id' => $test->id]),
                 ['name' => 'example-name-update', 'description' => 'example-description'])
@@ -74,11 +108,10 @@ class FreeTextTest extends TestCase
         $this->actingAs($this->user)
             ->get('free-text')
             ->assertSeeText('example-name-update');
-
     }
 
     /**
-     * Updating a free Test Test
+     * Removing a test
      *
      * @return void
      */
