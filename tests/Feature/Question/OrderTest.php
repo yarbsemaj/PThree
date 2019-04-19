@@ -117,6 +117,10 @@ class OrderTest extends TestCase
             ->get('order')
             ->assertSeeText('example-name-update');
 
+        $this->actingAs($this->user)
+            ->get(route('order.show', ['id' => $test->id]))
+            ->assertSeeText('word 3')->assertDontSeeText('word 1');
+
     }
 
     public function test_edit_for_another_user()
