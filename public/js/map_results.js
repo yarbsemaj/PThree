@@ -25,7 +25,7 @@ $(function () {
     ctx = canvas.getContext('2d');
     img.src = $("#map").data("img-src");
 
-    img.onload = setTimeout(setupCanvas, 1500);
+    img.onload = setTimeout(setupCanvas, 2000);
 
     loadPins();
 });

@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use Exception;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,8 +31,8 @@ class Owns implements Rule
     public function passes($attribute, $value)
     {
         try {
-            return $this->class::findOrFail($value)->getOwner() == Auth::user();
-        } catch (\Exception $exception) {
+            return $this->class::findOrFail($value)->getOwner()->id == Auth::id();
+        } catch (Exception $exception) {
             return false;
         }
     }
