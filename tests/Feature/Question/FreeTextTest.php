@@ -15,7 +15,7 @@ class FreeTextTest extends TestCase
 
     public function setUp()
     {
-        parent::setUp(); // I forgot this one
+        parent::setUp();
 
         $this->user = factory('App\User')->create();
     }
