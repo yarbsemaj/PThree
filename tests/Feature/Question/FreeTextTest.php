@@ -25,7 +25,7 @@ class FreeTextTest extends TestCase
      *
      * @return void
      */
-    public function test_add_tes()
+    public function test_add_test()
     {
         $this->actingAs($this->user)
             ->post(route('free-text.store'),

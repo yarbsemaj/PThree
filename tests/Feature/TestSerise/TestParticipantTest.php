@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
-class ManageTest extends TestCase
+class TestParticipantTest extends TestCase
 {
 
     private $user;

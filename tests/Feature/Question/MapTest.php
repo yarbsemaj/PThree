@@ -6,7 +6,7 @@ use App\Test;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class OrderTest extends TestCase
+class MapTest extends TestCase
 {
 
     private $user;
