@@ -3,6 +3,15 @@
 @section("title",$data->token)
 @section('card-body')
     <div class="card">
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item"><b>Country: </b>{{$data->country->name}}</li>
+                <li class="list-group-item"><b>Police Force: </b>{{$data->policeForce->name}}</li>
+                <li class="list-group-item"><b>Route Into Role: </b>{{$data->routeIntoRole->name}}</li>
+                <li class="list-group-item"><b>Years in the role: </b>{{$data->years_in_role}}</li>
+                <li class="list-group-item"><b>Training competed: </b>{{$data->training}}</li>
+            </ul>
+        </div>
     </div>
     <br>
     <div class="card">
