@@ -20,6 +20,7 @@
             <div class="card">
                 <div class="card-header">Test Series</div>
                 <div class="card-body">
+                    <img class="img-fluid" src="{{asset('img/link.png')}}">
                     <a class="btn btn-lg btn-block btn-success" href="{{route("test-series.index")}}">View Test
                         Series</a>
                 </div>
@@ -27,6 +28,7 @@
             <div class="card">
                 <div class="card-header">Responses</div>
                 <div class="card-body">
+                    <img class="img-fluid" src="{{asset('img/srug.png')}}">
                     <a class="btn btn-lg btn-block btn-success" href="{{route("test-participant.index")}}">View Test
                         Participants</a>
                 </div>
