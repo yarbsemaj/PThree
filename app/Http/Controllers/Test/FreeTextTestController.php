@@ -121,7 +121,7 @@ class FreeTextTestController extends TestType
             'name' => 'required',
         ]);
 
-        $freeTextTest = Test::findOrFail($id)->testable;
+        $freeTextTest = Test::findOrFail($id);
 
         $data = $request->all();
 

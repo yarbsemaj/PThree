@@ -6,9 +6,12 @@ use App\ImageSelectTest;
 use App\ImageSelectTestResult;
 use App\Test;
 use App\TestParticipant;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ImageSelectTestController extends TestType
@@ -25,7 +28,7 @@ class ImageSelectTestController extends TestType
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(Request $request)
     {
@@ -46,7 +49,7 @@ class ImageSelectTestController extends TestType
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function create()
     {
@@ -56,10 +59,10 @@ class ImageSelectTestController extends TestType
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Validation\ValidationException
+     * @return RedirectResponse|Redirector
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -98,7 +101,7 @@ class ImageSelectTestController extends TestType
      *
      * @param  int $id
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function show($id)
     {
@@ -112,7 +115,7 @@ class ImageSelectTestController extends TestType
      *
      * @param  int $id
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function edit($id)
     {
@@ -125,11 +128,11 @@ class ImageSelectTestController extends TestType
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param  int $id
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Validation\ValidationException
+     * @return RedirectResponse|Redirector
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -157,6 +160,8 @@ class ImageSelectTestController extends TestType
 
         $test = Test::findOrFail($id)->testable;
 
+        Test::findOrFail($id)->update($data);
+
         $test->update($data);
 
         $test->imageSelectImages()->delete();
@@ -171,7 +176,7 @@ class ImageSelectTestController extends TestType
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function destroy($id)
     {
