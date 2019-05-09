@@ -19,7 +19,7 @@ class MapTestController extends TestType
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['image']);
         $this->middleware('owns:Test')->except(['index', 'create', 'store', 'image']);
         $this->middleware('testType:MapTest')->except(['index', 'create', 'store', 'image']);
 
